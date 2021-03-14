@@ -1,0 +1,19 @@
+.container-footer {
+    margin: 0 70px;
+    margin-top: 150px;
+    margin-bottom: 30px;
+    border-top: 1px solid #eee;
+}
+
+#footer {
+    margin-top: 12px;
+}
+
+#footer p a:hover {
+    background: none;
+}
+
+#footer p {
+    text-align: center;
+    margin-top: 10px;
+}

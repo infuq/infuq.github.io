@@ -1,0 +1,59 @@
+* {
+	margin: 0;
+	padding: 0;/* 清除内外边距 */
+	text-decoration: none;
+	list-style: none;
+	box-sizing: border-box;
+}
+
+body {
+	font-family: 'Segoe UI',SegoeUI,'Microsoft YaHei',微软雅黑,"Helvetica Neue",Helvetica,Arial,sans-serif;
+    font-size: 14px;
+    line-height: 1.5;
+    color: #24292e;
+    background-color: #fff;
+}
+
+ul {
+	list-style: none;/* 去掉列表样式小点 */
+}
+
+.clearfix:before, .clearfix:after {/* 清除浮动 */
+	display: table;
+	content: "";
+}
+.clearfix:after {
+	clear: both;
+}
+.clearfix {
+	*zoom: 1;
+}
+
+a {
+	color: blue;
+	text-decoration: none; /* 取消下划线 */
+}
+a:hover {
+	background: none;
+}
+input {
+	border: 0; /* 所有的表单边框为0 */
+	box-sizing: border-box;/* border和padding 都包含在width里面*/
+}
+
+.hljs {
+    background: 0;
+}
+pre {
+    padding: 0;
+    height: auto;
+    margin-top: 0;
+    margin-bottom: 0;
+    background-color: #f0f0f0;
+}
+pre code {
+    overflow-x: auto;
+    overflow-y: auto;
+    word-break: keep-all;
+    white-space: pre;
+}

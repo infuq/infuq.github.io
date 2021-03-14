@@ -1,27 +1,39 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
-<head>
-    <meta charset="en"/>
-    <title>求索</title>
-</head>
-<body>
-    <div id="app">
-		<h2>{{link}}</h2>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+        <title>求索</title>
+        <link href="r/libs/font-awesome/4.0.3/css/font-awesome.min.css" media="screen" rel="stylesheet" type="text/css">
         
-    </div>
+        <link href="r/css/common.css" rel="stylesheet" />
+        <link href="r/css/header.css"  rel="stylesheet" />
+        <link href="r/css/footer.css"  rel="stylesheet" />
+        <link href="r/css/mobile.css"  rel="stylesheet" />
+        <link href="r/css/index.css"  rel="stylesheet" />
+    </head>
+<body>
 
+    <!-- 中间 -->
+    <section id="app" class="content clearfix">
+
+        <h2>个人站点 https://www.infuq.com/</h2>
+        
+    </section>
+
+    <!-- 尾部 -->
+    <script language="javascript" type="text/javascript" src="r/js/footer.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/vue@2.6.12/dist/vue.js"></script>
     <script>
         const app = new Vue({
             el: '#app',
             data: {
-				link: 'https://www.infuq.com/'
+		        link: 'https://www.infuq.com/'
             },
             methods: {
 
             }
-        })    
-
+        })
     </script>
 </body>
 </html>

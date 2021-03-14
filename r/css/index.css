@@ -1,0 +1,67 @@
+.content {
+    display: flex;
+    margin: 50px auto;
+    width: 700px;
+    height : 260px;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-content: center;
+}
+.item {
+    margin: 10px 10px;
+    width: 150px;
+    height: 50px;
+    background: #e0e2e4;
+    border-radius: 6px;
+    text-align: center;
+    line-height: 50px;
+}
+/* 解决最后一行左对齐问题 */
+.content:after {
+    content:'';
+    width: 150px;
+    height: 0;
+    display: block;
+    margin: 10px 10px;
+}
+.content a {
+    color: #2c3e50;
+}
+.content a.active, .content a:hover {
+    background: #1b9bff;
+    transition: .5s;
+}
+
+
+@media (max-width: 858px) {
+    .content {
+        display: flex;
+        margin: 50px auto;
+        width: 100%;
+        height : 90%;
+        flex-wrap: wrap;
+        justify-content: center;
+        align-content: center;
+    }
+    .item {
+        margin: 10px 10px;
+    }
+
+    .item {
+        margin: 10px 10px;
+        width: 150px;
+        height: 50px;
+        background: #e0e2e4;
+        border-radius: 6px;
+        text-align: center;
+        line-height: 50px;
+    }
+    .content a {
+        color: #2c3e50;
+    }
+    .content a.active, .content a:hover {
+        background: #1b9bff;
+        transition: .5s;
+    }
+
+}
