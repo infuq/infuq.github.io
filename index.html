@@ -10,20 +10,29 @@
         <link href="r/css/header.css"  rel="stylesheet" />
         <link href="r/css/footer.css"  rel="stylesheet" />
         <link href="r/css/mobile.css"  rel="stylesheet" />
-        <link href="r/css/index.css"  rel="stylesheet" />
+        <link href="r/css/manual.css"  rel="stylesheet" />
     </head>
 <body>
 
     <!-- 中间 -->
-    <section id="app" class="content clearfix">
+    <section class="content-link" id="app">
 
-        <h2>个人站点 https://www.infuq.com/</h2>
-        
+        <div>
+            <span class="link">第三方文章</span>
+
+            <div class="link-list">
+                <p style="height: 10px;"></p>
+                <i class="fa fa-link" aria-hidden="true"></i><a target="_blank" style="margin-left: 10px;" href="https://blog.csdn.net/qq_33336310/article/details/105456266">VirtualBox 安装Kali linux最新版（超详细）</a>
+                <p style="height: 5px;"></p>
+                <i class="fa fa-link" aria-hidden="true"></i><a target="_blank" style="margin-left: 10px;" href="https://zhuanlan.zhihu.com/p/186962681">Spring循环依赖</a>
+
+            </div>
+        </div>
     </section>
 
     <!-- 尾部 -->
     <script language="javascript" type="text/javascript" src="r/js/footer.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.12/dist/vue.js"></script>
+    <script src="./resources/vue/vue.js"></script>
     <script>
         const app = new Vue({
             el: '#app',
