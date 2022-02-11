@@ -21,6 +21,10 @@
     <!-- 中间 -->
     <section class="content-link" id="app">
 
+      <!-- 
+https://element.eleme.cn/#/zh-CN/component/collapse
+
+      -->
         <div id="app">
             <span class="link">MySQL常用命令</span>
 
@@ -61,15 +65,6 @@ shell> mysql --help | grep my.cnf<br>
         mysql> SHOW VARIABLES LIKE 'innodb_buffer%';<br>
         mysql> SELECT * FROM GLOBAL_VARIABLES WHERE VARIABLE_NAME LIKE 'innodb_buffer%';<br>
         <br>
-        mysql> SHOW VARIABLES LIKE 'log_error';&nbsp;&nbsp;&nbsp;<cite style="color: lightcoral;">-- 错误日志位置</cite><br>
-        mysql> SHOW VARIABLES LIKE 'long_query_time';&nbsp;&nbsp;&nbsp;<cite style="color: lightcoral;">-- 慢查询阈值</cite><br>
-        mysql> SHOW VARIABLES LIKE 'slow_query_log';&nbsp;&nbsp;&nbsp;<cite style="color: lightcoral;">-- 是否开启慢查询</cite><br>
-        mysql> SHOW VARIABLES LIKE 'slow_query_log_file';&nbsp;&nbsp;&nbsp;<cite style="color: lightcoral;">-- 慢查询日志文件位置</cite><br>
-        <br>
-        mysql> SHOW VARIABLES LIKE 'log_queries_not_using_indexes';&nbsp;&nbsp;&nbsp;<cite style="color: lightcoral;">-- 运行的SQL语句没有使用索引是否记录到慢查询日志文件</cite><br>
-        mysql> SHOW VARIABLES LIKE 'log_throttle_queries_not_using_indexes';&nbsp;&nbsp;&nbsp;<cite style="color: lightcoral;">-- 每分钟允许记录到慢查询日志且未使用索引的SQL语句次数, 默认为0, 没有限制</cite><br>
-        [ 总结 ] 未使用索引语句即便可以记录到慢查询日志中, 但也可以限制每分钟记录的次数, 防止文件大小不断增加.<br>
-        <br>
         mysql> SHOW STATUS;<br>
         mysql> SHOW PROCESSLIST;&nbsp;&nbsp;&nbsp;<cite style="color: lightcoral;">-- 查看当前所有进程连接工作状态</cite><br>
         shell> mysql -uroot -pxxx -e 'SHOW PROCESSLIST' | grep State | sort | uniq -c | sort -rn<br>
@@ -77,7 +72,41 @@ shell> mysql --help | grep my.cnf<br>
 
       </div>
     </el-collapse-item>
-    <el-collapse-item title="profile" name="3">
+
+    
+    <el-collapse-item title="慢查询配置" name="3">
+      <div>
+
+        mysql> SHOW VARIABLES LIKE 'log_error';&nbsp;&nbsp;&nbsp;<cite style="color: lightcoral;">-- 错误日志位置</cite><br>
+        mysql> SHOW VARIABLES LIKE 'long_query_time';&nbsp;&nbsp;&nbsp;<cite style="color: lightcoral;">-- 慢查询阈值</cite><br>
+        mysql> SHOW VARIABLES LIKE 'slow_query_log';&nbsp;&nbsp;&nbsp;<cite style="color: lightcoral;">-- 是否开启慢查询日志</cite><br>
+        mysql> SHOW VARIABLES LIKE 'slow_query_log_file';&nbsp;&nbsp;&nbsp;<cite style="color: lightcoral;">-- 慢查询日志文件位置, 默认host_name-slow.log</cite><br>
+        <br>
+        mysql> SHOW VARIABLES LIKE 'log_queries_not_using_indexes';&nbsp;&nbsp;&nbsp;<cite style="color: lightcoral;">-- 运行的SQL语句没有使用索引是否记录到慢查询日志文件</cite><br>
+        mysql> SHOW VARIABLES LIKE 'log_throttle_queries_not_using_indexes';&nbsp;&nbsp;&nbsp;<cite style="color: lightcoral;">-- 每分钟允许记录到慢查询日志且未使用索引的SQL语句次数, 默认为0, 没有限制</cite><br>
+        [ 说明 ] 未使用索引语句即便可以记录到慢查询日志中, 但也可以限制每分钟记录的次数, 防止文件大小不断增加.<br>
+        <br>
+        mysql> SHOW VARIABLES LIKE 'log_output';&nbsp;&nbsp;&nbsp;<cite style="color: lightcoral;">-- 日志存储方式</cite><br>    
+        [ 说明 ] <br>
+        log_output='FILE'表示将日志存入文件, 默认值是'FILE'<br>
+        log_output='TABLE'表示将日志存入数据库mysql.slow_log表中<br>
+        MySQL数据库支持同时两种日志存储方式, 配置时以逗号隔开即可. 如：log_output='FILE,TABLE'.<br>
+        日志记录到系统的专用日志表中, 要比记录到文件耗费更多的系统资源. 因此对于需要启用慢查询日志又需要能够获得更高的系统性能, 那么建议优先记录到文件 .
+        <br>
+        <br>
+
+        mysql> set global slow_query_log=1;<br>
+        mysql> set global long_query_time=4;<br>
+        mysql> set global log_output='TABLE';<br>
+        [ 说明 ]<br>
+        1. 以上修改在MySQL数据库重启后失效<br>
+        2. 修改后需要重新连接或者新开启一个会话才能有效<br>
+        3. 将以上参数写入my.cnf文件永久有效<br>
+
+      </div>
+    </el-collapse-item>
+
+    <el-collapse-item title="profile" name="4">
         <div>
             mysql> show variables like 'profiling'; <cite style="color: lightcoral;">-- 查看profile开关状态</cite><br>
             mysql> set profiling = on; <cite style="color: lightcoral;">-- 开启profile</cite><br>
@@ -381,7 +410,7 @@ shell> mysql --help | grep my.cnf<br>
       </div>
     </el-collapse-item>
     <el-collapse-item title="BLOB & TEXT" name="3">
-        <div>            
+        <div>
             BLOB是一个二进制对象, 可以容纳可变数量的数据. 对BLOB值进行排序和比较时区分大小写.<br>
             TEXT是一个不区分大小写的BLOB. 对TEXT值进行排序和比较时不区分大小写.<br>
         </div>
