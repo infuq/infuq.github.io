@@ -185,9 +185,7 @@ shell> mysql --help | grep my.cnf<br>
             mysql> alter table 表名 modify 列名 数据类型;&nbsp;&nbsp;&nbsp;<br>
             例如 :<br>
             alter table userinfo modify address varchar(20) NOT NULL COMMENT '地址';<br>
-            alter table userinfo modify address varchar(20) NOT NULL COMMENT '地址' , <br>
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;modify year int(10) NOT NULL COMMENT '年份';<br>
+            alter table userinfo modify address varchar(20) NOT NULL COMMENT '地址' , modify year int(10) NOT NULL COMMENT '年份';<br>
         </div>
       </el-collapse-item>
 </el-collapse>
