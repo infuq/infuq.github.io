@@ -1,0 +1,518 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+        <title>MySQL常用命令</title>
+        <link href="r/libs/font-awesome/4.0.3/css/font-awesome.min.css" media="screen" rel="stylesheet" type="text/css">
+        
+        <link href="r/css/common.css" rel="stylesheet" />
+        <link href="r/css/header.css" rel="stylesheet" />
+        <link href="r/css/footer.css" rel="stylesheet" />
+        <link href="r/css/mobile.css" rel="stylesheet" />
+        <link href="r/css/manual.css" rel="stylesheet" />
+
+        <link rel="stylesheet" href="https://www.infuq.com/resources/element-ui@2.15.2/index.css"/>
+		<link rel="stylesheet" href="https://www.infuq.com/r/libs/font-awesome/4.0.3/css/font-awesome.min.css" media="screen" type="text/css" />
+		<link rel="stylesheet" href="https://g.alicdn.com/de/prismplayer/2.8.2/skins/default/aliplayer-min.css"/>
+    </head>
+<body>
+
+    <!-- 中间 -->
+    <section class="content-link" id="app">
+
+        <div id="app">
+            <span class="link">MySQL常用命令</span>
+
+            <div class="link-list">
+                <p style="height: 10px;"></p>
+                
+                
+
+mysql> SELECT VERSION();<br>
+shell> mysql --help | grep my.cnf<br>
+<br>
+<br>
+
+
+<el-collapse v-model="otherNames" >    
+    <el-collapse-item title="事务" name="1">
+      <div>
+        mysql> SELECT @@tx_isolation;<br>
+        mysql> SELECT @@transaction_isolation;<br>
+        mysql> SET session transaction isolation level read uncommitted;<br>
+        mysql> SET session transaction isolation level read committed;<br>
+        mysql> SET session transaction isolation level repeatable read;<br>
+        mysql> SET session transaction isolation level serializable;<br>
+        <br>
+        mysql> SHOW VARIABLES LIKE 'autocommit';<br>
+        mysql> SET autocommit = 1;		&nbsp;&nbsp;&nbsp;<cite style="color: lightcoral;">-- 开启自动提交</cite><br>
+        mysql> SET autocommit = 0;		&nbsp;&nbsp;&nbsp;<cite style="color: lightcoral;">-- 关闭自动提交</cite><br>
+        <br>
+        mysql> start transaction;<br>
+        ...<br>
+        mysql> rollback;<br>
+        mysql> commit;<br>
+
+      </div>
+    </el-collapse-item>
+    <el-collapse-item title="SHOW命令" name="2">
+      <div>
+        mysql> SHOW VARIABLES LIKE 'innodb_buffer%';<br>
+        mysql> SELECT * FROM GLOBAL_VARIABLES WHERE VARIABLE_NAME LIKE 'innodb_buffer%';<br>
+        <br>
+        mysql> SHOW VARIABLES LIKE 'log_error';&nbsp;&nbsp;&nbsp;<cite style="color: lightcoral;">-- 错误日志位置</cite><br>
+        mysql> SHOW VARIABLES LIKE 'long_query_time';&nbsp;&nbsp;&nbsp;<cite style="color: lightcoral;">-- 慢查询阈值</cite><br>
+        mysql> SHOW VARIABLES LIKE 'slow_query_log';&nbsp;&nbsp;&nbsp;<cite style="color: lightcoral;">-- 是否开启慢查询</cite><br>
+        mysql> SHOW VARIABLES LIKE 'slow_query_log_file';&nbsp;&nbsp;&nbsp;<cite style="color: lightcoral;">-- 慢查询日志文件位置</cite><br>
+        <br>
+        mysql> SHOW VARIABLES LIKE 'log_queries_not_using_indexes';&nbsp;&nbsp;&nbsp;<cite style="color: lightcoral;">-- 运行的SQL语句没有使用索引是否记录到慢查询日志文件</cite><br>
+        mysql> SHOW VARIABLES LIKE 'log_throttle_queries_not_using_indexes';&nbsp;&nbsp;&nbsp;<cite style="color: lightcoral;">-- 每分钟允许记录到慢查询日志且未使用索引的SQL语句次数, 默认为0, 没有限制</cite><br>
+        [ 总结 ] 未使用索引语句即便可以记录到慢查询日志中, 但也可以限制每分钟记录的次数, 防止文件大小不断增加.<br>
+        <br>
+        mysql> SHOW STATUS;<br>
+        mysql> SHOW PROCESSLIST;&nbsp;&nbsp;&nbsp;<cite style="color: lightcoral;">-- 查看当前所有进程连接工作状态</cite><br>
+        shell> mysql -uroot -pxxx -e 'SHOW PROCESSLIST' | grep State | sort | uniq -c | sort -rn<br>
+        <br>
+
+      </div>
+    </el-collapse-item>
+    <el-collapse-item title="profile" name="3">
+        <div>
+            mysql> show variables like 'profiling'; <cite style="color: lightcoral;">-- 查看profile开关状态</cite><br>
+            mysql> set profiling = on; <cite style="color: lightcoral;">-- 开启profile</cite><br>
+            <br>
+            mysql> show profiles;<br>
+            mysql> show profile for query Query_ID;<br>
+        </div>
+      </el-collapse-item>
+
+</el-collapse>
+
+<br>
+<br>
+<br>
+
+<el-collapse v-model="databaseNames" >    
+    <el-collapse-item title="创建数据库" name="1">
+      <div>
+        mysql> create database 数据库名
+      </div>
+    </el-collapse-item>
+    <el-collapse-item title="删除数据库" name="2">
+      <div>
+        mysql> drop database 数据库名
+      </div>
+    </el-collapse-item>
+    <el-collapse-item title="选择数据库" name="3">
+        <div>
+            mysql> use 数据库名
+        </div>
+      </el-collapse-item>
+</el-collapse>
+
+
+<br>
+<br>
+<br>
+
+
+
+<el-collapse v-model="tableNames" @change="handleTableChange">    
+    <el-collapse-item title="创建表" name="1">
+      <div>
+        CREATE TABLE TABLE_NAME (<br>
+        &nbsp;&nbsp;&nbsp;id int(20) UNSIGNED PRIMARY KEY AUTO_INCREMENT COMMENT '主键',<br>
+        &nbsp;&nbsp;&nbsp;v1 varchar(20) NOT NULL UNIQUE COMMENT '名称',<br>
+        &nbsp;&nbsp;&nbsp;v2 varchar(10) NOT NULL COMMENT '毛色',<br>
+        &nbsp;&nbsp;&nbsp;v3 varchar(15) NOT NULL COMMENT '所属区域',<br>
+        &nbsp;&nbsp;&nbsp;v4 text COMMENT '描述内容',<br>
+        &nbsp;&nbsp;&nbsp;v5 date COMMENT '出生日期',<br>
+        &nbsp;&nbsp;&nbsp;v6 char(1) NOT NULL DEFAULT '' COMMENT '首次',<br>
+        &nbsp;&nbsp;&nbsp;v7 enum('male','female') NOT NULL DEFAULT 'male' COMMENT '性别',<br>
+        &nbsp;&nbsp;&nbsp;CONSTRAINT 完整性约束名 PRIMARY KEY (id),<br>
+        &nbsp;&nbsp;&nbsp;CONSTRAINT 完整性约束名 FOREIGN KEY (列名) REFERENCES 表名(列名) ON DELETE CASCADE ON UPDATE NO ACTION<br>
+        &nbsp;&nbsp;&nbsp;UNIQUE KEY 完整性约束名(列名(长度))<br>
+        ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT = 'TABLE_NAME 表';<br>
+        
+      </div>
+    </el-collapse-item>
+    <el-collapse-item title="删除表" name="2">
+      <div>          
+          mysql> drop table TABLE_NAME;
+      </div>
+    </el-collapse-item>
+    <el-collapse-item title="修改表名" name="3">
+      <div>
+        mysql> alter table 旧表名 rename to 新表名;
+      </div>
+    </el-collapse-item>
+    <el-collapse-item title="查看表结构" name="4">
+        <div>
+            mysql> desc 表名;
+        </div>
+      </el-collapse-item>
+      <el-collapse-item title="查看建表语句" name="5">
+        <div>
+            mysql> show create table 表名 \G;
+        </div>
+      </el-collapse-item>
+</el-collapse>
+
+<br>
+<br>
+<br>
+
+
+<el-collapse v-model="columnNames" @change="handleColumnChange">    
+    <el-collapse-item title="新增列" name="1">
+      <div>
+        mysql> alter table 表名 add column 新列名 数据类型 [完整性约束]
+      </div>
+    </el-collapse-item>
+    <el-collapse-item title="删除列" name="2">
+      <div>
+        mysql> alter table 表名 drop [column] 列名
+      </div>
+    </el-collapse-item>
+    <el-collapse-item title="修改列名" name="3">
+      <div>
+        mysql> alter table 表名 change 旧列名 新列名 数据类型
+      </div>
+    </el-collapse-item>
+    <el-collapse-item title="修改数据类型" name="4">
+        <div>
+            mysql> alter table 表名 modify 列名 数据类型;&nbsp;&nbsp;&nbsp;<br>
+            例如 :<br>
+            alter table userinfo modify address varchar(20) NOT NULL COMMENT '地址';<br>
+            alter table userinfo modify address varchar(20) NOT NULL COMMENT '地址' , <br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;modify year int(10) NOT NULL COMMENT '年份';<br>
+        </div>
+      </el-collapse-item>
+</el-collapse>
+
+
+<br>
+<br>
+<br>
+
+
+
+<el-collapse v-model="constraintNames" @change="handleConstraintChange">    
+    <el-collapse-item title="新增或删除NULL约束类型" name="1">
+      <div>
+        mysql> alter table 表名 modify 列名 数据类型 NULL | NOT NULL
+      </div>
+    </el-collapse-item>
+    <el-collapse-item title="新增或删除PRIMARY KEY约束类型" name="2">
+      <div>
+        mysql> alter table 表名 add constraint 完整性约束名 primary key(列名)<br>
+        mysql> alter table 表名 drop primary key<br>
+      </div>
+    </el-collapse-item>
+    <el-collapse-item title="新增或删除FOREIGN KEY约束类型" name="3">
+        <div>
+            mysql> alter table 表名 add constraint 完整性约束名 foreign key(列名) references 表名(列名) on delete cascade on update cascade   列名必须存在索引<br>
+            mysql> alter table 表名 drop foreign key 完整性约束名<br>
+        </div>
+      </el-collapse-item>
+      <el-collapse-item title="新增或删除UNIQUE约束类型" name="4">
+        <div>
+            mysql> alter table 表名 add constraint 完整性约束名 unique key(列名)<br>
+            mysql> alter table 表名 drop index 完整性约束名<br>
+        </div>
+      </el-collapse-item>
+</el-collapse>
+
+
+<br>
+<br>
+<br>
+
+
+
+
+
+<el-collapse v-model="indexNames" @change="handleIndexChange">    
+    <el-collapse-item title="创建索引" name="1">
+      <div>
+        mysql> create [unique] index 索引名称 on 表名(字段名称(length));	&nbsp;&nbsp;&nbsp;<cite style="color: lightcoral;">-- 创建普通索引和唯一索引</cite><br>
+        mysql> alter table 表名 add [unique] index 索引名称(字段名称(length));	&nbsp;&nbsp;&nbsp;<cite style="color: lightcoral;">-- 创建普通索引和唯一索引</cite><br>
+        mysql> alter table 表名 add primary key(字段名称(length));		&nbsp;&nbsp;&nbsp;<cite style="color: lightcoral;">-- 创建主键索引</cite><br>
+        mysql> alter table 表名 add FULLTEXT INDEX 索引名称(字段名称(length));	&nbsp;&nbsp;&nbsp;<cite style="color: lightcoral;">-- 创建全文索引</cite><br>
+      </div>
+    </el-collapse-item>
+    <el-collapse-item title="删除索引" name="2">
+      <div>
+        mysql> drop index 索引名称 on 表名<br>
+        mysql> alter table 表名 drop index 索引名称<br>
+        mysql> alter table 表名 drop primary key<br>
+      </div>
+    </el-collapse-item>
+    <el-collapse-item title="查看索引" name="3">
+      <div>
+        mysql> show index from 表名 \G;<br>
+      </div>
+    </el-collapse-item>
+</el-collapse>
+
+
+<br>
+<br>
+<br>
+
+
+
+
+
+<el-collapse v-model="dateNames">
+    <el-collapse-item title="包含时间日期的创建表语句" name="1">
+        <div>
+            create table TABLE_NAME (<br>
+            &nbsp;&nbsp;&nbsp;id		int(20) auto_increment,<br>
+            &nbsp;&nbsp;&nbsp;produced_date	date,<br>
+            &nbsp;&nbsp;&nbsp;produced_time	time,<br>
+            &nbsp;&nbsp;&nbsp;produced_dt	datetime,<br>
+            &nbsp;&nbsp;&nbsp;produced_year	year(4),<br>
+            &nbsp;&nbsp;&nbsp;produced_ts	timestamp default CURRENT_TIMESTAMP,<br>
+            &nbsp;&nbsp;&nbsp;primary key(id)<br>
+            ) ENGINE=InnoDB;<br><br>
+            insert into TABLE_NAME values(1, CURDATE(), CURTIME(), NOW(), 2019, CURRENT_TIMESTAMP);<br>
+          
+        </div>
+      </el-collapse-item>
+    <el-collapse-item title="提取日期" name="2">
+      <div>
+        SELECT EXTRACT(YEAR FROM '2017-06-23 11:39:20') AS Year;	-- 提取年 2017<br>
+        SELECT EXTRACT(MONTH FROM '2017-06-23 11:39:20') AS Month;	-- 提取月 6<br>
+        SELECT EXTRACT(DAY FROM '2017-06-23 11:39:20') AS Day;		-- 提取日 23<br>
+        SELECT EXTRACT(HOUR FROM '2017-06-23 11:39:20') AS Hour;	-- 提取时 11<br>
+        SELECT EXTRACT(MINUTE FROM '2017-06-23 11:39:20') AS Minute;	-- 提取分 39<br>
+        SELECT EXTRACT(SECOND FROM '2017-06-23 11:39:20') AS Second;	-- 提取秒 20<br>
+        <br>
+        TYPE取值 : MICROSECOND, SECOND, MINUTE, HOUR, DAY, WEEK, MONTH, QUARTER, YEAR, SECOND_MICROSECOND, MINUTE_MICROSECOND, MINUTE_SECOND, HOUR_MICROSECOND, HOUR_SECOND, HOUR_MINUTE, DAY_MICROSECOND, DAY_SECOND, DAY_MINUTE, DAY_HOUR, YEAR_MONTH<br>        
+      </div>
+    </el-collapse-item>
+    <el-collapse-item title="增加日期" name="3">
+      <div>
+        SELECT DATE_ADD('2017-06-23 11:39:20',INTERVAL 2 YEAR);	-- 增加两年 2019-06-23 11:39:20<br>
+        SELECT DATE_ADD('2017-06-23 11:39:20',INTERVAL 3 DAY);	-- 增加三天 2017-06-26 11:39:20<br>
+      </div>
+    </el-collapse-item>
+    <el-collapse-item title="减少日期" name="4">
+      <div>
+        SELECT DATE_SUB('2017-06-23 11:39:20',INTERVAL 2 YEAR);	-- 减掉两年 2015-06-23 11:39:20<br>
+        SELECT DATE_SUB('2017-06-23 11:39:20',INTERVAL 3 DAY);	-- 减掉三天 2017-06-20 11:39:20<br>
+      </div>
+    </el-collapse-item>
+    <el-collapse-item title="格式化日期" name="5">
+        <div>
+            SELECT DATE_FORMAT(NOW(),'%Y-%m-%d');	-- 格式化成指定格式, 例如 2018-08-17<br>
+            <br>
+            <template>    
+                <el-table
+                :data="tableData"
+                height="250"
+                border
+                style="width: 100%">
+                <el-table-column
+                    prop="date_format"
+                    label="-"
+                    width="180">
+                </el-table-column>
+                <el-table-column
+                    prop="date_comment"
+                    label="描述">
+                </el-table-column>
+                </el-table>
+            </template>
+        </div>
+      </el-collapse-item>
+      <el-collapse-item title="计算日期" name="6">
+        <div>
+            SELECT DATEDIFF('2017-06-27 11:39:20','2017-06-23 11:39:20');	-- 前者比后者多的天数<br>
+        </div>
+      </el-collapse-item>
+      <el-collapse-item title="日期函数" name="7">
+        <div>            
+            <template>    
+                <el-table
+                :data="tableData2"
+                height="250"
+                border
+                style="width: 100%">
+                <el-table-column
+                    prop="date_format"
+                    label="函数"
+                    width="200">
+                </el-table-column>
+                <el-table-column
+                    prop="date_comment"
+                    label="描述">
+                </el-table-column>
+                </el-table>
+            </template>
+        </div>
+      </el-collapse-item>
+</el-collapse>
+
+
+<br>
+<br>
+<br>
+
+
+
+<el-collapse v-model="v2Names">    
+    <el-collapse-item title="常用函数" name="1">
+      <div>
+
+        concat('A','-','B') as column &nbsp;&nbsp;&nbsp;<cite>结果是A-B</cite><br>
+        concat_ws('/','A','B') as column &nbsp;&nbsp;&nbsp;<cite>结果是A/B . 手动指定参数之间的分隔符</cite><br>
+        <br>
+        SELECT IF(3=3,1,0) AS SEX;<br>
+        SELECT IFNULL(address,'默认值') as city FROM animal;<br>
+
+      </div>
+    </el-collapse-item>
+    <el-collapse-item title="复制表" name="2">
+      <div>
+        create table copy_animal select * from animal  where 1=1; <cite style="color: lightcoral;">-- 同时复制表中的数据</cite><br>
+        create table copy_animal select * from animal  where 1=0; <cite style="color: lightcoral;">-- 仅复制表结构</cite><br>
+      </div>
+    </el-collapse-item>
+    <el-collapse-item title="BLOB & TEXT" name="3">
+        <div>            
+            BLOB是一个二进制对象, 可以容纳可变数量的数据. 对BLOB值进行排序和比较时区分大小写.<br>
+            TEXT是一个不区分大小写的BLOB. 对TEXT值进行排序和比较时不区分大小写.<br>
+        </div>
+      </el-collapse-item>
+</el-collapse>
+
+
+<br>
+<br>
+<br>
+
+
+
+
+
+
+                <p style="height: 100px;"></p>
+                人生除了眼前的苟且, 还有C++和远方.<br>
+                深耕 & 浅尝辄止<br>
+
+                
+            </div>
+        </div>
+    </section>
+
+    <!-- 尾部 -->
+    <script language="javascript" type="text/javascript" src="r/js/footer.js"></script>
+	<script charset="utf-8" type="text/javascript" src="https://g.alicdn.com/de/prismplayer/2.8.2/aliplayer-min.js"></script>
+    <script src="https://www.infuq.com/resources/vue@2.6.14/vue.js"></script>
+    <script src="https://www.infuq.com/resources/element-ui@2.15.2/index.js"></script>
+    <script src="https://www.infuq.com/resources/axios@0.21.1/axios.min.js"></script>
+    <script type="text/javascript">
+        const { defineComponent } = Vue
+        const { h } = Vue;
+        const Main = {
+            data() {
+                return {
+
+                    indexNames: ['0'],
+                    tableNames: ['0'],
+                    columnNames: ['0'],                
+                    constraintNames: ['0'],
+                    databaseNames: ['0'],
+                    otherNames: ['0'],
+                    dateNames: ['0'],
+                    v2Names: ['1'],
+                
+
+                    tableData: [{
+                        date_format: '%a',
+                        date_comment: '缩写星期名'
+                        }, {                    
+                            date_format: '%b',
+                            date_comment: '缩写月名'
+                        }, {                    
+                            date_format: '%c',
+                            date_comment: '月,数值'
+                        }, {                    
+                            date_format: '%D',
+                            date_comment: '带有英文前缀的月中的天'
+                        }, {                    
+                            date_format: '%d',
+                            date_comment: '月的天,数值(00-31)'
+                        }, {                    
+                            date_format: '%e',
+                            date_comment: '月的天,数值(0-31)'
+                        }, {                    
+                            date_format: '%f',
+                            date_comment: '微秒'
+                        }, {                    
+                            date_format: '%H',
+                            date_comment: '小时(00-23)'
+                        }, {                    
+                            date_format: '%h',
+                            date_comment: '小时(01-12)'
+                        }, {                    
+                            date_format: '%I',
+                            date_comment: '小时(01-12)'
+                        }, {                    
+                            date_format: '%i',
+                            date_comment: '分钟,数值(00-59)'
+                        }, {                    
+                            date_format: '%j',
+                            date_comment: '年的天(001-366)'
+                        }, {                    
+                            date_format: '%k',
+                            date_comment: '小时(0-23)'                        
+                    }],
+                    tableData2: [{
+                        date_format: 'NOW()',
+                        date_comment: '当前日期和时间, 2018-08-17 03:09:18'
+                        }, {                    
+                            date_format: 'CURDATE()',
+                            date_comment: '当前日期, 2018-08-17'
+                        }, {                    
+                            date_format: 'CURRENT_DATE()',
+                            date_comment: '当前日期, 2018-08-17'
+                        }, {                    
+                            date_format: 'CURTIME()',
+                            date_comment: '当前时间 03:09:18'
+                        }, {                    
+                            date_format: 'CURRENT_TIME()',
+                            date_comment: '当前时间 03:09:18'
+                        }, {                    
+                            date_format: 'DATE("2018-08-17 03:09:18")',
+                            date_comment: '提取日期 2018-08-17'
+                        }, {                    
+                            date_format: 'TIME("2018-08-19 07:31:15")',
+                            date_comment: '提取时间 07:31:15'                                          
+                    }],
+
+                }
+            },
+            created() {
+
+            },
+
+            methods: {
+
+                handleIndexChange(val) { },
+                handleTableChange(val) { },
+                handleColumnChange(val) { },
+                handleConstraintChange(val) { },
+
+            }
+        };
+
+        var Ctor = Vue.extend(Main)
+        new Ctor().$mount('#app')
+    </script>
+</body>
+</html>
