@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+        <title>EXPLAIN</title>
+        <link href="r/libs/font-awesome/4.0.3/css/font-awesome.min.css" media="screen" rel="stylesheet" type="text/css">
+        
+        <link href="r/css/common.css" rel="stylesheet" />
+        <link href="r/css/header.css" rel="stylesheet" />
+        <link href="r/css/footer.css" rel="stylesheet" />
+        <link href="r/css/mobile.css" rel="stylesheet" />
+        <link href="r/css/manual.css" rel="stylesheet" />
+
+        <link rel="stylesheet" href="https://www.infuq.com/resources/element-ui@2.15.2/index.css"/>
+        <link rel="stylesheet" href="https://www.infuq.com/r/libs/font-awesome/4.0.3/css/font-awesome.min.css" media="screen" type="text/css" />
+        <link rel="stylesheet" href="https://g.alicdn.com/de/prismplayer/2.8.2/skins/default/aliplayer-min.css"/>
+    </head>
+<body>
+
+    <!-- 中间 -->
+    <section class="content-link" id="app">
+
+      <!-- 
+https://element.eleme.cn/#/zh-CN/component/collapse
+
+      -->
+        <div id="app">
+            <span class="link">EXPLAIN</span>
+
+            <div class="link-list">
+                <p style="height: 10px;"></p>
+                
+                <el-collapse v-model="v2Names" >    
+                  <el-collapse-item title="id" name="1">
+                    <div>
+                      
+                    </div>
+                  </el-collapse-item>
+                  <el-collapse-item title="select_type" name="2">
+                    <div>
+                    </div>
+                  </el-collapse-item>
+                  <el-collapse-item title="table" name="3">
+                    <div>
+                      <template>    
+                        <el-table
+                          :data="tableData"
+                          height="250"
+                          stripe
+                          style="width: 100%">
+                          <el-table-column
+                              prop="k1"
+                              label="-"
+                              width="180">
+                          </el-table-column>
+                          <el-table-column
+                              prop="k2"
+                              label="描述">
+                          </el-table-column>
+                        </el-table>
+                      </template>
+
+
+                    </div>
+                  </el-collapse-item>
+                  <el-collapse-item title="possible_keys" name="4">
+                    <div>
+                      可能用到的索引<br>
+                      注意 : 系统估计可能用到多个索引, 但最终只能用一个.
+                    </div>
+                  </el-collapse-item>
+                  <el-collapse-item title="key" name="5">
+                    <div>
+                      最终用的索引
+                    </div>
+                  </el-collapse-item>
+                  <el-collapse-item title="key_len" name="6">
+                    <div>
+                      使用的索引最大长度
+                    </div>
+                  </el-collapse-item>
+                  <el-collapse-item title="type" name="7">
+                    <div>
+                      查询方式<br><br>
+
+                      <template>    
+                        <el-table
+                          :data="typeData"
+                          stripe
+                          style="width: 100%">
+                          <el-table-column
+                              prop="k1"
+                              label="-"
+                              width="180">
+                          </el-table-column>
+                          <el-table-column
+                              prop="k2"
+                              label="描述">
+                          </el-table-column>
+                        </el-table>
+                      </template>
+
+                    </div>
+                  </el-collapse-item>
+                  <el-collapse-item title="ref" name="8">
+                    <div>
+                    </div>
+                  </el-collapse-item>
+                  <el-collapse-item title="rows" name="9">
+                    <div>
+                      估计扫描行数
+                    </div>
+                  </el-collapse-item>
+                  <el-collapse-item title="extra" name="10">
+                    <div>
+                      <template>    
+                        <el-table
+                          :data="extraData"
+                          stripe
+                          style="width: 100%">
+                          <el-table-column
+                              prop="k1"
+                              label="-"
+                              width="220">
+                          </el-table-column>
+                          <el-table-column
+                              prop="k2"
+                              label="描述">
+                          </el-table-column>
+                        </el-table>
+                      </template>
+                    </div>
+                  </el-collapse-item>
+                </el-collapse>
+<br>
+<br>
+<br>
+
+
+
+
+
+
+
+
+                <p style="height: 100px;"></p>
+                人生除了眼前的苟且, 还有C++和远方.<br>
+                深耕 & 浅尝辄止<br>
+
+                
+            </div>
+        </div>
+    </section>
+
+    <!-- 尾部 -->
+    <script language="javascript" type="text/javascript" src="r/js/footer.js"></script>
+	<script charset="utf-8" type="text/javascript" src="https://g.alicdn.com/de/prismplayer/2.8.2/aliplayer-min.js"></script>
+    <script src="https://www.infuq.com/resources/vue@2.6.14/vue.js"></script>
+    <script src="https://www.infuq.com/resources/element-ui@2.15.2/index.js"></script>
+    <script src="https://www.infuq.com/resources/axios@0.21.1/axios.min.js"></script>
+    <script type="text/javascript">
+        const { defineComponent } = Vue
+        const { h } = Vue;
+        const Main = {
+            data() {
+                return {
+                  v2Names: ['5','7','9','10'],
+
+                  tableData: [{
+                        k1: '实际表名',
+                        k2: '如SELECT * FROM company;'
+                        }, {                    
+                            k1: '表别名',
+                            k2: '如SELECT * FROM company as cpy;'
+                        }, {                    
+                            k1: 'derived',
+                            k2: '如FROM子查询'
+                        }, {                    
+                            k1: 'NULL',
+                            k2: '如直接计算得出结果 . EXPLAIN SELECT 1+2 \G;'                                        
+                    }],
+
+
+
+                    typeData: [{
+                        k1: 'ALL',
+                        k2: '扫描所有数据行'
+                        }, {                    
+                            k1: 'index',
+                            k2: '扫描所有索引节点'
+                        }, {                    
+                            k1: 'range',
+                            k2: '根据索引进行范围扫描'
+                        }, {                    
+                            k1: 'index_subquery',
+                            k2: ''          
+                        }, {                    
+                            k1: 'unique_subquery',
+                            k2: ''
+                        }, {                    
+                            k1: 'index_merge',
+                            k2: ''
+                        }, {                    
+                            k1: 'ref_or_null',
+                            k2: ''              
+                        }, {                    
+                            k1: 'fulltext',
+                            k2: ''          
+                        }, {                    
+                            k1: 'ref',
+                            k2: '- 通过索引列直接引用到匹配的所有行数据\
+                                  - 非唯一索引扫描, 返回匹配的所有行'
+                        }, {                    
+                            k1: 'eq_ref',
+                            k2: '- 通过索引列直接引用某1行数据\
+                                  - 唯一索引扫描, 对于每个索引键, 表中只有一条记录与之匹配. 常见于主键或唯一索引扫描.'
+                        }, {                    
+                            k1: 'const, system, NULL',
+                            k2: ''                                        
+                    }],
+
+                    extraData: [{
+                        k1: 'using index',
+                        k2: '表示相应的SELECT操作中使用了覆盖索引'
+                        }, {                    
+                            k1: 'using where',
+                            k2: ''
+                        }, {                    
+                            k1: 'using temporary',
+                            k2: 'MySQL需要使用临时表来存储结果集,常用于排序和分组查询'
+                        }, {                    
+                            k1: 'using filesort',
+                            k2: 'MySQL无法使用索引完成的排序操作称为\'文件排序\''            
+                        }, {                    
+                            k1: 'range checked for each recond',
+                            k2: ''                                        
+                    }]
+
+                }
+            },
+            created() {
+
+            },
+
+            methods: {
+
+            }
+        };
+
+        var Ctor = Vue.extend(Main)
+        new Ctor().$mount('#app')
+    </script>
+</body>
+</html>

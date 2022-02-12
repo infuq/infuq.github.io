@@ -365,19 +365,19 @@ shell> mysql --help | grep my.cnf<br>
         <div>            
             <template>    
                 <el-table
-                :data="tableData2"
-                height="250"
-                border
-                style="width: 100%">
-                <el-table-column
-                    prop="date_format"
-                    label="函数"
-                    width="200">
-                </el-table-column>
-                <el-table-column
-                    prop="date_comment"
-                    label="描述">
-                </el-table-column>
+                  :data="tableData2"
+                  height="250"
+                  stripe
+                  style="width: 100%">
+                  <el-table-column
+                      prop="date_format"
+                      label="函数"
+                      width="200">
+                  </el-table-column>
+                  <el-table-column
+                      prop="date_comment"
+                      label="描述">
+                  </el-table-column>
                 </el-table>
             </template>
         </div>
