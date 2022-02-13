@@ -3,7 +3,7 @@
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
-        <title>Redis常用命令</title>
+        <title>安装Redis</title>
         <link href="r/libs/font-awesome/4.0.3/css/font-awesome.min.css" media="screen" rel="stylesheet" type="text/css">
         
         <link href="r/css/common.css" rel="stylesheet" />
@@ -21,48 +21,49 @@
     <!-- 中间 -->
     <section class="content-link" id="app">
 
-      <!-- 
-https://element.eleme.cn/#/zh-CN/component/collapse
-
-      -->
         <div id="app">
-            <span class="link">Redis常用命令</span>
+            <span class="link">安装Redis</span>
 
             <div class="link-list">
                 <p style="height: 10px;"></p>
+
+校验环境<br>
+[root@infuq ~]# gcc -v<br>
+[root@infuq ~]# yum install gcc<br>
+[root@infuq ~]# yum install gcc-c++<br>
+<br>
+下载<br>
+[root@infuq ~]# wget http://download.redis.io/releases/redis-4.0.10.tar.gz<br>
+<br>
+解压<br>
+[root@infuq ~]# tar -xzvf redis-4.0.10.tar.gz<br>
+[root@infuq ~]# cd redis-4.0.10<br>
+<br>
+安装<br>
+[root@infuq redis-4.0.10]# make PREFIX=/usr/local/redis install<br>
+[root@infuq redis-4.0.10]# cp redis.conf /usr/local/redis/<br>
+<br>
+修改配置<br>
+[root@infuq ~]# cd /usr/local/redis/<br>
+[root@infuq redis]# vi redis.conf<br>
+daemonize yes<br>
+<br>
+启动服务<br>
+[root@infuq redis]# bin/redis-server redis.conf<br>
+<br>
+连接服务<br>
+[root@infuq redis]# bin/redis-cli<br>
+<br>
+单实例关闭服务(客户端未连接服务器)<br>
+[root@infuq redis]# bin/redis-cli shutdown<br>
+<br>
+单实例关闭服务(客户端已连接服务器)<br>
+127.0.0.1:6379> shutdown<br>
+<br>
+多实例关闭服务<br>
+[root@infuq ~]# /usr/local/redis/bin/redis-cli -p 6379 shutdown
                 
-                默认16个数据库.初始默认使用0号库. 所有库密码相同<br><br>
-                select <dbid> 切换数据库<br>
-                keys *<br>
-                exists key [key ...]<br>
-                type key<br>
-                del key [key ...]<br>
-                expire key seconds<br>
-                ttl key 查看剩余过期时间<br>
-                dbsize 查看当前数据库key的数量<br>
-                flushdb 清空当前库<br>
-                flushall 清空全部库<br>
-                get key<br>
-                set key value<br>
-                append key value<br>
-                strlen key<br>
-                setnx key value 只有key不存在时执行<br>
-                <br>
-                incr key<br>
-                incrby key increment<br>
-                decr key<br>
-                decrby key decrement<br>
-                <br>
-                mset key value [key value ...]<br>
-                mget key [key ...]<br>
-                msetnx key value [key value ...]<br>
-                <br>
-                getrange key start end<br>
-                getrange key start -1    倒数第一个<br>
-                setrange key offset value<br>
-                <br>
-                setex key seconds value 设置键值同时设置过期时间<br>
-                getset key value 设置新值同时获得旧值<br>                
+                        
 
                 <br>        
                 <br>        
@@ -95,7 +96,7 @@ https://element.eleme.cn/#/zh-CN/component/collapse
             data() {
                 return {
 
-                    
+                   
 
                 }
             },
@@ -104,7 +105,6 @@ https://element.eleme.cn/#/zh-CN/component/collapse
             },
 
             methods: {
-
 
 
             }
