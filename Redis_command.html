@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+        <title>Redis常用命令</title>
+        <link href="r/libs/font-awesome/4.0.3/css/font-awesome.min.css" media="screen" rel="stylesheet" type="text/css">
+        
+        <link href="r/css/common.css" rel="stylesheet" />
+        <link href="r/css/header.css" rel="stylesheet" />
+        <link href="r/css/footer.css" rel="stylesheet" />
+        <link href="r/css/mobile.css" rel="stylesheet" />
+        <link href="r/css/manual.css" rel="stylesheet" />
+
+        <link rel="stylesheet" href="https://www.infuq.com/resources/element-ui@2.15.2/index.css"/>
+		<link rel="stylesheet" href="https://www.infuq.com/r/libs/font-awesome/4.0.3/css/font-awesome.min.css" media="screen" type="text/css" />
+		<link rel="stylesheet" href="https://g.alicdn.com/de/prismplayer/2.8.2/skins/default/aliplayer-min.css"/>
+    </head>
+<body>
+
+    <!-- 中间 -->
+    <section class="content-link" id="app">
+
+      <!-- 
+https://element.eleme.cn/#/zh-CN/component/collapse
+
+      -->
+        <div id="app">
+            <span class="link">Redis常用命令</span>
+
+            <div class="link-list">
+                <p style="height: 10px;"></p>
+                
+                默认16个数据库.初始默认使用0号库. 所有库密码相同<br><br>
+                select <dbid> 切换数据库<br>
+                keys *<br>
+                exists key [key ...]<br>
+                type key<br>
+                del key [key ...]<br>
+                expire key seconds<br>
+                ttl key 查看剩余过期时间<br>
+                dbsize 查看当前数据库key的数量<br>
+                flushdb 清空当前库<br>
+                flushall 清空全部库<br>
+                get key<br>
+                set key value<br>
+                append key value<br>
+                strlen key<br>
+                setnx key value 只有key不存在时执行<br>
+                <br>
+                incr key<br>
+                incrby key increment<br>
+                decr key<br>
+                decrby key decrement<br>
+                <br>
+                mset key value [key value ...]<br>
+                mget key [key ...]<br>
+                msetnx key value [key value ...]<br>
+                <br>
+                getrange key start end<br>
+                getrange key start -1    倒数第一个<br>
+                setrange key offset value<br>
+                <br>
+                setex key seconds value 设置键值同时设置过期时间<br>
+                getset key value 设置新值同时获得旧值<br>                
+
+                <br>        
+                <br>        
+                <br>        
+
+
+
+
+
+
+                <p style="height: 100px;"></p>
+                人生除了眼前的苟且, 还有C++和远方.<br>
+                深耕 & 浅尝辄止<br>
+
+                
+            </div>
+        </div>
+    </section>
+
+    <!-- 尾部 -->
+    <script language="javascript" type="text/javascript" src="r/js/footer.js"></script>
+	<script charset="utf-8" type="text/javascript" src="https://g.alicdn.com/de/prismplayer/2.8.2/aliplayer-min.js"></script>
+    <script src="https://www.infuq.com/resources/vue@2.6.14/vue.js"></script>
+    <script src="https://www.infuq.com/resources/element-ui@2.15.2/index.js"></script>
+    <script src="https://www.infuq.com/resources/axios@0.21.1/axios.min.js"></script>
+    <script type="text/javascript">
+        const { defineComponent } = Vue
+        const { h } = Vue;
+        const Main = {
+            data() {
+                return {
+
+                    indexNames: ['0'],
+                    tableNames: ['0'],
+                    columnNames: ['0'],                
+                    constraintNames: ['0'],
+                    databaseNames: ['0'],
+                    otherNames: ['0'],
+                    dateNames: ['0'],
+                    v2Names: ['1'],
+                
+
+                    tableData: [{
+                        date_format: '%a',
+                        date_comment: '缩写星期名'
+                        }, {                    
+                            date_format: '%b',
+                            date_comment: '缩写月名'
+                        }, {                    
+                            date_format: '%c',
+                            date_comment: '月,数值'
+                        }, {                    
+                            date_format: '%D',
+                            date_comment: '带有英文前缀的月中的天'
+                        }, {                    
+                            date_format: '%d',
+                            date_comment: '月的天,数值(00-31)'
+                        }, {                    
+                            date_format: '%e',
+                            date_comment: '月的天,数值(0-31)'
+                        }, {                    
+                            date_format: '%f',
+                            date_comment: '微秒'
+                        }, {                    
+                            date_format: '%H',
+                            date_comment: '小时(00-23)'
+                        }, {                    
+                            date_format: '%h',
+                            date_comment: '小时(01-12)'
+                        }, {                    
+                            date_format: '%I',
+                            date_comment: '小时(01-12)'
+                        }, {                    
+                            date_format: '%i',
+                            date_comment: '分钟,数值(00-59)'
+                        }, {                    
+                            date_format: '%j',
+                            date_comment: '年的天(001-366)'
+                        }, {                    
+                            date_format: '%k',
+                            date_comment: '小时(0-23)'                        
+                    }],
+                    tableData2: [{
+                        date_format: 'NOW()',
+                        date_comment: '当前日期和时间, 2018-08-17 03:09:18'
+                        }, {                    
+                            date_format: 'CURDATE()',
+                            date_comment: '当前日期, 2018-08-17'
+                        }, {                    
+                            date_format: 'CURRENT_DATE()',
+                            date_comment: '当前日期, 2018-08-17'
+                        }, {                    
+                            date_format: 'CURTIME()',
+                            date_comment: '当前时间 03:09:18'
+                        }, {                    
+                            date_format: 'CURRENT_TIME()',
+                            date_comment: '当前时间 03:09:18'
+                        }, {                    
+                            date_format: 'DATE("2018-08-17 03:09:18")',
+                            date_comment: '提取日期 2018-08-17'
+                        }, {                    
+                            date_format: 'TIME("2018-08-19 07:31:15")',
+                            date_comment: '提取时间 07:31:15'                                          
+                    }],
+
+                }
+            },
+            created() {
+
+            },
+
+            methods: {
+
+                handleIndexChange(val) { },
+                handleTableChange(val) { },
+                handleColumnChange(val) { },
+                handleConstraintChange(val) { },
+
+            }
+        };
+
+        var Ctor = Vue.extend(Main)
+        new Ctor().$mount('#app')
+    </script>
+</body>
+</html>
