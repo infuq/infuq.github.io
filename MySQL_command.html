@@ -13,8 +13,17 @@
         <link href="r/css/manual.css" rel="stylesheet" />
 
         <link rel="stylesheet" href="https://www.infuq.com/resources/element-ui@2.15.2/index.css"/>
-		<link rel="stylesheet" href="https://www.infuq.com/r/libs/font-awesome/4.0.3/css/font-awesome.min.css" media="screen" type="text/css" />
-		<link rel="stylesheet" href="https://g.alicdn.com/de/prismplayer/2.8.2/skins/default/aliplayer-min.css"/>
+        <link rel="stylesheet" href="https://www.infuq.com/r/libs/font-awesome/4.0.3/css/font-awesome.min.css" media="screen" type="text/css" />
+        <link rel="stylesheet" href="https://g.alicdn.com/de/prismplayer/2.8.2/skins/default/aliplayer-min.css"/>
+
+        <style>
+          .el-table .cell {                    
+            text-align: left;
+            white-space: pre-line;/*保留换行符*/
+          }
+        </style>
+
+
     </head>
 <body>
 
@@ -40,7 +49,11 @@ shell> mysql --help | grep my.cnf<br>
 
 
 <el-collapse v-model="otherNames" >    
-    <el-collapse-item title="事务" name="1">
+    <el-collapse-item name="1">
+      <template slot="title">
+        <span style="color:crimson">[ 事务 ]</span>
+      </template>
+
       <div>
         mysql> SELECT @@tx_isolation;<br>
         mysql> SELECT @@transaction_isolation;<br>
@@ -60,7 +73,10 @@ shell> mysql --help | grep my.cnf<br>
 
       </div>
     </el-collapse-item>
-    <el-collapse-item title="SHOW命令" name="2">
+    <el-collapse-item name="2">
+      <template slot="title">
+        <span style="color:crimson">[ SHOW命令 ]</span>
+      </template>
       <div>
         mysql> SHOW VARIABLES LIKE 'innodb_buffer%';<br>
         mysql> SELECT * FROM GLOBAL_VARIABLES WHERE VARIABLE_NAME LIKE 'innodb_buffer%';<br>
@@ -74,7 +90,10 @@ shell> mysql --help | grep my.cnf<br>
     </el-collapse-item>
 
     
-    <el-collapse-item title="慢查询配置" name="3">
+    <el-collapse-item name="3">
+      <template slot="title">
+        <span style="color:crimson">[ 慢查询配置 ]</span>
+      </template>
       <div>
 
         mysql> SHOW VARIABLES LIKE 'log_error';&nbsp;&nbsp;&nbsp;<cite style="color: lightcoral;">-- 错误日志位置</cite><br>
@@ -106,7 +125,10 @@ shell> mysql --help | grep my.cnf<br>
       </div>
     </el-collapse-item>
 
-    <el-collapse-item title="profile" name="4">
+    <el-collapse-item name="4">
+      <template slot="title">
+        <span style="color:crimson">[ profile ]</span>
+      </template>
         <div>
             mysql> show variables like 'profiling'; <cite style="color: lightcoral;">-- 查看profile开关状态</cite><br>
             mysql> set profiling = on; <cite style="color: lightcoral;">-- 开启profile</cite><br>
@@ -123,20 +145,29 @@ shell> mysql --help | grep my.cnf<br>
 <br>
 
 <el-collapse v-model="databaseNames" >    
-    <el-collapse-item title="创建数据库" name="1">
+    <el-collapse-item name="1">
+      <template slot="title">
+        <span style="color:crimson">[ 创建数据库 ]</span>
+      </template>
       <div>
         mysql> create database 数据库名
       </div>
     </el-collapse-item>
-    <el-collapse-item title="删除数据库" name="2">
+    <el-collapse-item name="2">
+      <template slot="title">
+        <span style="color:crimson">[ 删除数据库 ]</span>
+      </template>
       <div>
         mysql> drop database 数据库名
       </div>
     </el-collapse-item>
-    <el-collapse-item title="选择数据库" name="3">
-        <div>
-            mysql> use 数据库名
-        </div>
+    <el-collapse-item name="3">
+      <template slot="title">
+        <span style="color:crimson">[ 选择数据库 ]</span>
+      </template>
+      <div>
+          mysql> use 数据库名
+      </div>
       </el-collapse-item>
 </el-collapse>
 
@@ -148,7 +179,10 @@ shell> mysql --help | grep my.cnf<br>
 
 
 <el-collapse v-model="tableNames" @change="handleTableChange">    
-    <el-collapse-item title="创建表" name="1">
+    <el-collapse-item name="1">
+      <template slot="title">
+        <span style="color:crimson">[ 创建表 ]</span>
+      </template>
       <div>
         CREATE TABLE TABLE_NAME (<br>
         &nbsp;&nbsp;&nbsp;id int(20) UNSIGNED PRIMARY KEY AUTO_INCREMENT COMMENT '主键',<br>
@@ -166,22 +200,34 @@ shell> mysql --help | grep my.cnf<br>
         
       </div>
     </el-collapse-item>
-    <el-collapse-item title="删除表" name="2">
+    <el-collapse-item name="2">
+      <template slot="title">
+        <span style="color:crimson">[ 删除表 ]</span>
+      </template>
       <div>          
           mysql> drop table TABLE_NAME;
       </div>
     </el-collapse-item>
-    <el-collapse-item title="修改表名" name="3">
+    <el-collapse-item name="3">
+      <template slot="title">
+        <span style="color:crimson">[ 修改表名 ]</span>
+      </template>
       <div>
         mysql> alter table 旧表名 rename to 新表名;
       </div>
     </el-collapse-item>
-    <el-collapse-item title="查看表结构" name="4">
+    <el-collapse-item name="4">
+      <template slot="title">
+        <span style="color:crimson">[ 查看表结构 ]</span>
+      </template>
         <div>
             mysql> desc 表名;
         </div>
       </el-collapse-item>
-      <el-collapse-item title="查看建表语句" name="5">
+      <el-collapse-item name="5">
+        <template slot="title">
+          <span style="color:crimson">[ 查看建表语句 ]</span>
+        </template>
         <div>
             mysql> show create table 表名 \G;
         </div>
@@ -194,22 +240,34 @@ shell> mysql --help | grep my.cnf<br>
 
 
 <el-collapse v-model="columnNames" @change="handleColumnChange">    
-    <el-collapse-item title="新增列" name="1">
+    <el-collapse-item name="1">
+      <template slot="title">
+        <span style="color:crimson">[ 新增列 ]</span>
+      </template>
       <div>
         mysql> alter table 表名 add column 新列名 数据类型 [完整性约束]
       </div>
     </el-collapse-item>
-    <el-collapse-item title="删除列" name="2">
+    <el-collapse-item name="2">
+      <template slot="title">
+        <span style="color:crimson">[ 删除列 ]</span>
+      </template>
       <div>
         mysql> alter table 表名 drop [column] 列名
       </div>
     </el-collapse-item>
-    <el-collapse-item title="修改列名" name="3">
+    <el-collapse-item name="3">
+      <template slot="title">
+        <span style="color:crimson">[ 修改列名 ]</span>
+      </template>
       <div>
         mysql> alter table 表名 change 旧列名 新列名 数据类型
       </div>
     </el-collapse-item>
-    <el-collapse-item title="修改数据类型" name="4">
+    <el-collapse-item name="4">
+      <template slot="title">
+        <span style="color:crimson">[ 修改数据类型 ]</span>
+      </template>
         <div>
             mysql> alter table 表名 modify 列名 数据类型;&nbsp;&nbsp;&nbsp;<br>
             例如 :<br>
@@ -227,24 +285,36 @@ shell> mysql --help | grep my.cnf<br>
 
 
 <el-collapse v-model="constraintNames" @change="handleConstraintChange">    
-    <el-collapse-item title="新增或删除NULL约束类型" name="1">
+    <el-collapse-item name="1">
+      <template slot="title">
+        <span style="color:crimson">[ 新增或删除NULL约束类型 ]</span>
+      </template>
       <div>
         mysql> alter table 表名 modify 列名 数据类型 NULL | NOT NULL
       </div>
     </el-collapse-item>
-    <el-collapse-item title="新增或删除PRIMARY KEY约束类型" name="2">
+    <el-collapse-item name="2">
+      <template slot="title">
+        <span style="color:crimson">[ 新增或删除PRIMARY KEY约束类型 ]</span>
+      </template>
       <div>
         mysql> alter table 表名 add constraint 完整性约束名 primary key(列名)<br>
         mysql> alter table 表名 drop primary key<br>
       </div>
     </el-collapse-item>
-    <el-collapse-item title="新增或删除FOREIGN KEY约束类型" name="3">
+    <el-collapse-item name="3">
+      <template slot="title">
+        <span style="color:crimson">[ 新增或删除FOREIGN KEY约束类型 ]</span>
+      </template>
         <div>
             mysql> alter table 表名 add constraint 完整性约束名 foreign key(列名) references 表名(列名) on delete cascade on update cascade   列名必须存在索引<br>
             mysql> alter table 表名 drop foreign key 完整性约束名<br>
         </div>
       </el-collapse-item>
-      <el-collapse-item title="新增或删除UNIQUE约束类型" name="4">
+      <el-collapse-item name="4">
+        <template slot="title">
+          <span style="color:crimson">[ 新增或删除UNIQUE约束类型 ]</span>
+        </template>
         <div>
             mysql> alter table 表名 add constraint 完整性约束名 unique key(列名)<br>
             mysql> alter table 表名 drop index 完整性约束名<br>
@@ -262,7 +332,10 @@ shell> mysql --help | grep my.cnf<br>
 
 
 <el-collapse v-model="indexNames" @change="handleIndexChange">    
-    <el-collapse-item title="创建索引" name="1">
+    <el-collapse-item name="1">
+      <template slot="title">
+        <span style="color:crimson">[ 创建索引 ]</span>
+      </template>
       <div>
         mysql> create [unique] index 索引名称 on 表名(字段名称(length));	&nbsp;&nbsp;&nbsp;<cite style="color: lightcoral;">-- 创建普通索引和唯一索引</cite><br>
         mysql> alter table 表名 add [unique] index 索引名称(字段名称(length));	&nbsp;&nbsp;&nbsp;<cite style="color: lightcoral;">-- 创建普通索引和唯一索引</cite><br>
@@ -270,14 +343,20 @@ shell> mysql --help | grep my.cnf<br>
         mysql> alter table 表名 add FULLTEXT INDEX 索引名称(字段名称(length));	&nbsp;&nbsp;&nbsp;<cite style="color: lightcoral;">-- 创建全文索引</cite><br>
       </div>
     </el-collapse-item>
-    <el-collapse-item title="删除索引" name="2">
+    <el-collapse-item name="2">
+      <template slot="title">
+        <span style="color:crimson">[ 删除索引 ]</span>
+      </template>
       <div>
         mysql> drop index 索引名称 on 表名<br>
         mysql> alter table 表名 drop index 索引名称<br>
         mysql> alter table 表名 drop primary key<br>
       </div>
     </el-collapse-item>
-    <el-collapse-item title="查看索引" name="3">
+    <el-collapse-item name="3">
+      <template slot="title">
+        <span style="color:crimson">[ 查看索引 ]</span>
+      </template>
       <div>
         mysql> show index from 表名 \G;<br>
       </div>
@@ -294,7 +373,10 @@ shell> mysql --help | grep my.cnf<br>
 
 
 <el-collapse v-model="dateNames">
-    <el-collapse-item title="包含时间日期的创建表语句" name="1">
+    <el-collapse-item name="1">
+      <template slot="title">
+        <span style="color:crimson">[ 包含时间日期的创建表语句 ]</span>
+      </template>
         <div>
             create table TABLE_NAME (<br>
             &nbsp;&nbsp;&nbsp;id		int(20) auto_increment,<br>
@@ -309,7 +391,10 @@ shell> mysql --help | grep my.cnf<br>
           
         </div>
       </el-collapse-item>
-    <el-collapse-item title="提取日期" name="2">
+    <el-collapse-item name="2">
+      <template slot="title">
+        <span style="color:crimson">[ 提取日期 ]</span>
+      </template>
       <div>
         SELECT EXTRACT(YEAR FROM '2017-06-23 11:39:20') AS Year;	-- 提取年 2017<br>
         SELECT EXTRACT(MONTH FROM '2017-06-23 11:39:20') AS Month;	-- 提取月 6<br>
@@ -321,19 +406,28 @@ shell> mysql --help | grep my.cnf<br>
         TYPE取值 : MICROSECOND, SECOND, MINUTE, HOUR, DAY, WEEK, MONTH, QUARTER, YEAR, SECOND_MICROSECOND, MINUTE_MICROSECOND, MINUTE_SECOND, HOUR_MICROSECOND, HOUR_SECOND, HOUR_MINUTE, DAY_MICROSECOND, DAY_SECOND, DAY_MINUTE, DAY_HOUR, YEAR_MONTH<br>        
       </div>
     </el-collapse-item>
-    <el-collapse-item title="增加日期" name="3">
+    <el-collapse-item name="3">
+      <template slot="title">
+        <span style="color:crimson">[ 增加日期 ]</span>
+      </template>
       <div>
         SELECT DATE_ADD('2017-06-23 11:39:20',INTERVAL 2 YEAR);	-- 增加两年 2019-06-23 11:39:20<br>
         SELECT DATE_ADD('2017-06-23 11:39:20',INTERVAL 3 DAY);	-- 增加三天 2017-06-26 11:39:20<br>
       </div>
     </el-collapse-item>
-    <el-collapse-item title="减少日期" name="4">
+    <el-collapse-item name="4">
+      <template slot="title">
+        <span style="color:crimson">[ 减少日期 ]</span>
+      </template>
       <div>
         SELECT DATE_SUB('2017-06-23 11:39:20',INTERVAL 2 YEAR);	-- 减掉两年 2015-06-23 11:39:20<br>
         SELECT DATE_SUB('2017-06-23 11:39:20',INTERVAL 3 DAY);	-- 减掉三天 2017-06-20 11:39:20<br>
       </div>
     </el-collapse-item>
-    <el-collapse-item title="格式化日期" name="5">
+    <el-collapse-item name="5">
+      <template slot="title">
+        <span style="color:crimson">[ 格式化日期 ]</span>
+      </template>
         <div>
             SELECT DATE_FORMAT(NOW(),'%Y-%m-%d');	-- 格式化成指定格式, 例如 2018-08-17<br>
             <br>
@@ -356,12 +450,18 @@ shell> mysql --help | grep my.cnf<br>
             </template>
         </div>
       </el-collapse-item>
-      <el-collapse-item title="计算日期" name="6">
+      <el-collapse-item name="6">
+        <template slot="title">
+          <span style="color:crimson">[ 计算日期 ]</span>
+        </template>
         <div>
             SELECT DATEDIFF('2017-06-27 11:39:20','2017-06-23 11:39:20');	-- 前者比后者多的天数<br>
         </div>
       </el-collapse-item>
-      <el-collapse-item title="日期函数" name="7">
+      <el-collapse-item name="7">
+        <template slot="title">
+          <span style="color:crimson">[ 日期函数 ]</span>
+        </template>
         <div>            
             <template>    
                 <el-table
@@ -392,7 +492,10 @@ shell> mysql --help | grep my.cnf<br>
 
 
 <el-collapse v-model="v2Names">    
-    <el-collapse-item title="常用函数" name="1">
+    <el-collapse-item name="1">
+      <template slot="title">
+        <span style="color:crimson">[ 常用函数 ]</span>
+      </template>
       <div>
 
         concat('A','-','B') as column &nbsp;&nbsp;&nbsp;<cite>-- 结果是A-B</cite><br>
@@ -403,13 +506,19 @@ shell> mysql --help | grep my.cnf<br>
 
       </div>
     </el-collapse-item>
-    <el-collapse-item title="复制表" name="2">
+    <el-collapse-item name="2">
+      <template slot="title">
+        <span style="color:crimson">[ 复制表 ]</span>
+      </template>
       <div>
         create table copy_animal select * from animal  where 1=1; <cite style="color: lightcoral;">-- 同时复制表中的数据</cite><br>
         create table copy_animal select * from animal  where 1=0; <cite style="color: lightcoral;">-- 仅复制表结构</cite><br>
       </div>
     </el-collapse-item>
-    <el-collapse-item title="BLOB & TEXT" name="3">
+    <el-collapse-item name="3">
+      <template slot="title">
+        <span style="color:crimson">[ BLOB & TEXT ]</span>
+      </template>
         <div>
             BLOB是一个二进制对象, 可以容纳可变数量的数据. 对BLOB值进行排序和比较时区分大小写.<br>
             TEXT是一个不区分大小写的BLOB. 对TEXT值进行排序和比较时不区分大小写.<br>

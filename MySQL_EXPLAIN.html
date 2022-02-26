@@ -15,6 +15,14 @@
         <link rel="stylesheet" href="https://www.infuq.com/resources/element-ui@2.15.2/index.css"/>
         <link rel="stylesheet" href="https://www.infuq.com/r/libs/font-awesome/4.0.3/css/font-awesome.min.css" media="screen" type="text/css" />
         <link rel="stylesheet" href="https://g.alicdn.com/de/prismplayer/2.8.2/skins/default/aliplayer-min.css"/>
+
+        <style>
+          .el-table .cell {                    
+            text-align: left;
+            white-space: pre-line;/*保留换行符*/
+          }
+        </style>
+
     </head>
 <body>
 
@@ -32,16 +40,28 @@ https://element.eleme.cn/#/zh-CN/component/collapse
                 <p style="height: 10px;"></p>
                 
                 <el-collapse v-model="v2Names" >    
-                  <el-collapse-item title="id" name="1">
+                  <el-collapse-item name="1">
+                    <template slot="title">
+                      <!-- <i class="el-icon-magic-stick"></i> -->
+                      <span style="color:crimson">[ id ]</span>
+                    </template>
                     <div>
                       
                     </div>
                   </el-collapse-item>
-                  <el-collapse-item title="select_type" name="2">
+                  <el-collapse-item name="2">
+                    <template slot="title">
+                      <!-- <i class="el-icon-magic-stick"></i> -->
+                      <span style="color:crimson">[ select_type ]</span>
+                    </template>
                     <div>
                     </div>
                   </el-collapse-item>
-                  <el-collapse-item title="table" name="3">
+                  <el-collapse-item name="3">
+                    <template slot="title">
+                      <!-- <i class="el-icon-magic-stick"></i> -->
+                      <span style="color:crimson">[ table ]</span>
+                    </template>
                     <div>
                       <template>    
                         <el-table
@@ -64,23 +84,39 @@ https://element.eleme.cn/#/zh-CN/component/collapse
 
                     </div>
                   </el-collapse-item>
-                  <el-collapse-item title="possible_keys" name="4">
+                  <el-collapse-item name="4">
+                    <template slot="title">
+                      <!-- <i class="el-icon-magic-stick"></i> -->
+                      <span style="color:crimson">[ possible_keys ]</span>
+                    </template>
                     <div>
                       可能用到的索引<br>
                       注意 : 系统估计可能用到多个索引, 但最终只能用一个.
                     </div>
                   </el-collapse-item>
-                  <el-collapse-item title="key" name="5">
+                  <el-collapse-item name="5">
+                    <template slot="title">
+                      <!-- <i class="el-icon-magic-stick"></i> -->
+                      <span style="color:crimson">[ key ]</span>
+                    </template>
                     <div>
                       真正使用的索引
                     </div>
                   </el-collapse-item>
-                  <el-collapse-item title="key_len" name="6">
+                  <el-collapse-item name="6">
+                    <template slot="title">
+                      <!-- <i class="el-icon-magic-stick"></i> -->
+                      <span style="color:crimson">[ key_len ]</span>
+                    </template>
                     <div>
                       使用的索引最大长度
                     </div>
                   </el-collapse-item>
-                  <el-collapse-item title="type" name="7">
+                  <el-collapse-item name="7">
+                    <template slot="title">
+                      <!-- <i class="el-icon-magic-stick"></i> -->
+                      <span style="color:crimson">[ type ]</span>
+                    </template>
                     <div>
                       查询方式<br><br>
 
@@ -91,7 +127,7 @@ https://element.eleme.cn/#/zh-CN/component/collapse
                           style="width: 100%">
                           <el-table-column
                               prop="k1"
-                              label="-"
+                              label="值"
                               width="180">
                           </el-table-column>
                           <el-table-column
@@ -103,16 +139,28 @@ https://element.eleme.cn/#/zh-CN/component/collapse
 
                     </div>
                   </el-collapse-item>
-                  <el-collapse-item title="ref" name="8">
+                  <el-collapse-item name="8">
+                    <template slot="title">
+                      <!-- <i class="el-icon-magic-stick"></i> -->
+                      <span style="color:crimson">[ ref ]</span>
+                    </template>
                     <div>
                     </div>
                   </el-collapse-item>
-                  <el-collapse-item title="rows" name="9">
+                  <el-collapse-item name="9">
+                    <template slot="title">
+                      <!-- <i class="el-icon-magic-stick"></i> -->
+                      <span style="color:crimson">[ rows ]</span>
+                    </template>
                     <div>
                       估计扫描行数
                     </div>
                   </el-collapse-item>
-                  <el-collapse-item title="extra" name="10">
+                  <el-collapse-item name="10">
+                    <template slot="title">
+                      <!-- <i class="el-icon-magic-stick"></i> -->
+                      <span style="color:crimson">[ extra ]</span>
+                    </template>
                     <div>
                       <template>    
                         <el-table
@@ -121,7 +169,7 @@ https://element.eleme.cn/#/zh-CN/component/collapse
                           style="width: 100%">
                           <el-table-column
                               prop="k1"
-                              label="-"
+                              label="值"
                               width="220">
                           </el-table-column>
                           <el-table-column
@@ -209,12 +257,12 @@ https://element.eleme.cn/#/zh-CN/component/collapse
                             k2: ''          
                         }, {                    
                             k1: 'ref',
-                            k2: '- 通过索引列直接引用到匹配的所有行数据\
-                                  - 非唯一索引扫描, 返回匹配的所有行'
+                            k2: '- 通过索引列直接引用到匹配的所有行数据' + '\n' + 
+                                  '- 非唯一索引扫描, 返回匹配的所有行'
                         }, {                    
                             k1: 'eq_ref',
-                            k2: '- 通过索引列直接引用某1行数据\
-                                  - 唯一索引扫描, 对于每个索引键, 表中只有一条记录与之匹配. 常见于主键或唯一索引扫描.'
+                            k2: '- 通过索引列直接引用某1行数据' + '\n' + 
+                                  '- 唯一索引扫描, 对于每个索引键, 表中只有一条记录与之匹配. 常见于主键或唯一索引扫描.'
                         }, {                    
                             k1: 'const, system, NULL',
                             k2: ''                                        
