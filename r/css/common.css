@@ -7,7 +7,8 @@
 }
 
 body {
-	font-family: 'Droid Sans Mono',SegoeUI,'Microsoft YaHei',微软雅黑,"Helvetica Neue",Helvetica,Arial,sans-serif;
+	/* font-family: 'Droid Sans Mono',SegoeUI,'Microsoft YaHei',微软雅黑,"Helvetica Neue",Helvetica,Arial,sans-serif; */
+	font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji";
     font-size: 14px;
     line-height: 1.5;
     color: #24292e;
@@ -31,7 +32,7 @@ ul {
 
 a {
 	color: blue;
-	text-decoration: none; /* 取消下划线 */
+	text-decoration: none;
 }
 a:hover {
 	background: none;
