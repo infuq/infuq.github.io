@@ -97,7 +97,7 @@ https://element.eleme.cn/#/zh-CN/component/collapse
                   <el-collapse-item name="5">
                     <template slot="title">
                       <!-- <i class="el-icon-magic-stick"></i> -->
-                      <span style="color:crimson">[ key ]</span>
+                      <span style="color:crimson">[ key ] *</span>
                     </template>
                     <div>
                       真正使用的索引
@@ -115,7 +115,7 @@ https://element.eleme.cn/#/zh-CN/component/collapse
                   <el-collapse-item name="7">
                     <template slot="title">
                       <!-- <i class="el-icon-magic-stick"></i> -->
-                      <span style="color:crimson">[ type ]</span>
+                      <span style="color:crimson">[ type ] *</span>
                     </template>
                     <div>
                       连接类型<br><br>
@@ -151,7 +151,7 @@ https://element.eleme.cn/#/zh-CN/component/collapse
                   <el-collapse-item name="9">
                     <template slot="title">
                       <!-- <i class="el-icon-magic-stick"></i> -->
-                      <span style="color:crimson">[ rows ]</span>
+                      <span style="color:crimson">[ rows ] *</span>
                     </template>
                     <div>
                       估计扫描行数
@@ -160,7 +160,7 @@ https://element.eleme.cn/#/zh-CN/component/collapse
                   <el-collapse-item name="10">
                     <template slot="title">
                       <!-- <i class="el-icon-magic-stick"></i> -->
-                      <span style="color:crimson">[ extra ]</span>
+                      <span style="color:crimson">[ extra ] *</span>
                     </template>
                     <div>
                       <template>    
@@ -214,7 +214,8 @@ https://element.eleme.cn/#/zh-CN/component/collapse
         const Main = {
             data() {
                 return {
-                  v2Names: ['5','7','9','10'],
+                  // v2Names: ['5','7','9','10'],
+                  v2Names: [],
 
                   tableData: [{
                         k1: '实际表名',
