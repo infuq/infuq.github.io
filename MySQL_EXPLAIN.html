@@ -71,7 +71,7 @@ https://element.eleme.cn/#/zh-CN/component/collapse
                           style="width: 100%">
                           <el-table-column
                               prop="k1"
-                              label="-"
+                              label="值"
                               width="180">
                           </el-table-column>
                           <el-table-column
@@ -182,23 +182,149 @@ https://element.eleme.cn/#/zh-CN/component/collapse
                     </div>
                   </el-collapse-item>
                 </el-collapse>
+            </div>
+
 <br>
 <br>
 <br>
 
+            <span class="link">EXPLAIN Join Types</span>
+            <br>
+            <br>
+            <span style="color: #e6a23c;">MySQL version : 5.7.37-log</span>
+            <br>
+            <br>
+            <el-divider content-position="left">system</el-divider>
+            <br>
+            查看MySQL官方对system的<a href="https://dev.mysql.com/doc/refman/5.7/en/explain-output.html#jointype_system" style="background-color:white;" target="_blank">说明</a>
+            
+            <br>
+            <br>
+            <i class="fa fa-tags" aria-hidden="true"></i> 案例一
+            <br><br>
+            首先创建两张表<br><br>
+            <div class="block">
+              <el-image 
+                style="width: 50%; height: 50%"
+                :src="creata_table_src" 
+                :preview-src-list="creata_table_srcList">
+              </el-image>
+            </div>
+            <br>
+            除了表名称不同之外, 它们所使用的执行引擎也不同 .<br><br>
+            接下来分别向两张表中各插入一条数据
+            <br>
+            <br>
+            <div class="block">
+              <el-image 
+                style="width: 50%; height: 50%"
+                :src="insert_table_src" 
+                :preview-src-list="insert_table_srcList">
+              </el-image>
+            </div>
+            <br>
+            查看执行计划
+            <br>
+            <br>
+            <div class="block">
+              <el-image 
+                style="width: 50%; height: 50%"
+                :src="explain_table_src" 
+                :preview-src-list="explain_table_srcList">
+              </el-image>
+            </div>
+            <br>
+            再向表中各插入一条数据, 每个表中各有2条数据 .
+            <br>
+            <br>
+            <div class="block">
+              <el-image 
+                style="width: 50%; height: 50%"
+                :src="again_insert_table_src" 
+                :preview-src-list="again_insert_table_srcList">
+              </el-image>
+            </div>
+            <br>
+            再次查看执行计划
+            <br>
+            <br>
+            <div class="block">
+              <el-image 
+                style="width: 50%; height: 50%"
+                :src="again_explain_table_src" 
+                :preview-src-list="again_explain_table_srcList">
+              </el-image>
+            </div>
+            <br>
+            <br>
+            
+            <span style="color: #67c23a;">结论</span>
+            <br>
+            MyISAM引擎的表, 表中只有一条数据, 进行简单查询时, 则type = system <br>
+            <br>
+            <br>
+            <i class="fa fa-tags" aria-hidden="true"></i> 案例二
+            <br><br>
+            紧接着上面的实验, 使用子查询
+            <br>
+            <br>
+            <div class="block">
+              <el-image 
+                style="width: 50%; height: 50%"
+                :src="sub_query_explain_table_src" 
+                :preview-src-list="sub_query_explain_table_srcList">
+              </el-image>
+            </div>
+            <br>
+
+            内层子查询返回一张临时表(仅包含一条数据), 外层从临时表查询, 其type = system <br>    
+            <br><br>
+            我们再次向表中各插入一条数据, 每张表各3条记录
+            <br><br>
+            <div class="block">
+              <el-image 
+                style="width: 50%; height: 50%"
+                :src="three_record_table_src" 
+                :preview-src-list="three_record_table_srcList">
+              </el-image>
+            </div>
+            <br>
+            如果子查询返回多条数据呢? 查看执行计划<br><br>
+            <div class="block">
+              <el-image 
+                style="width: 50%; height: 50%"
+                :src="three_record_explain_table_src" 
+                :preview-src-list="three_record_explain_table_srcList">
+              </el-image>
+            </div>
+            <br>
 
 
 
 
 
+            <br>
+            <span style="color: #67c23a;">结论</span>
+            <br>
+            子查询仅返回一条数据时, 则外层查询的type = system <br>
+            
+
+
+
+
+
+<br>
+<br>
+<br>
 
 
                 <p style="height: 100px;"></p>
                 人生除了眼前的苟且, 还有C++和远方.<br>
                 深耕 & 浅尝辄止<br>
 
-                
-            </div>
+
+
+
         </div>
     </section>
 
@@ -216,13 +342,48 @@ https://element.eleme.cn/#/zh-CN/component/collapse
                 return {
                   // v2Names: ['5','7','9','10'],
                   v2Names: [],
+                  creata_table_src: 'https://infuq.github.io/r/img/2022-2-26-1.png',
+                  creata_table_srcList: [
+                  'https://infuq.github.io/r/img/2022-2-26-1.png',
+                  ],
+                  insert_table_src: 'https://infuq.github.io/r/img/2022-2-26-2.png',
+                  insert_table_srcList: [
+                  'https://infuq.github.io/r/img/2022-2-26-2.png',
+                  ],
+                  explain_table_src: 'https://infuq.github.io/r/img/2022-2-26-3.png',
+                  explain_table_srcList: [
+                  'https://infuq.github.io/r/img/2022-2-26-3.png',
+                  ],
+                  again_insert_table_src: 'https://infuq.github.io/r/img/2022-2-26-4.png',
+                  again_insert_table_srcList: [
+                  'https://infuq.github.io/r/img/2022-2-26-4.png',
+                  ],
+                  again_explain_table_src: 'https://infuq.github.io/r/img/2022-2-26-5.png',
+                  again_explain_table_srcList: [
+                  'https://infuq.github.io/r/img/2022-2-26-5.png',
+                  ],
+                  sub_query_explain_table_src: 'https://infuq.github.io/r/img/2022-2-27-1.png',
+                  sub_query_explain_table_srcList: [
+                  'https://infuq.github.io/r/img/2022-2-27-1.png',
+                  ],
+                  three_record_table_src: 'https://infuq.github.io/r/img/2022-2-27-2.png',
+                  three_record_table_srcList: [
+                  'https://infuq.github.io/r/img/2022-2-27-2.png',
+                  ],
+                  three_record_explain_table_src: 'https://infuq.github.io/r/img/2022-2-27-3.png',
+                  three_record_explain_table_srcList: [
+                  'https://infuq.github.io/r/img/2022-2-27-3.png',
+                  ],
+
+
+                  
 
                   tableData: [{
                         k1: '实际表名',
-                        k2: '如SELECT * FROM company;'
+                        k2: '如SELECT * FROM company'
                         }, {                    
                             k1: '表别名',
-                            k2: '如SELECT * FROM company as cpy;'
+                            k2: '如SELECT * FROM company as cpy'
                         }, {                    
                             k1: 'derived',
                             k2: '如FROM子查询'
@@ -230,8 +391,6 @@ https://element.eleme.cn/#/zh-CN/component/collapse
                             k1: 'NULL',
                             k2: '如直接计算得出结果 . EXPLAIN SELECT 1+2 \G;'                                        
                     }],
-
-
 
                     typeData: [{
                         k1: 'ALL',
@@ -280,6 +439,12 @@ https://element.eleme.cn/#/zh-CN/component/collapse
                             k1: 'using where',
                             k2: ''
                         }, {                    
+                            k1: 'using where using index',
+                            k2: ''
+                        },{                    
+                            k1: 'using index condition',
+                            k2: ''
+                        },{                    
                             k1: 'using temporary',
                             k2: 'MySQL需要使用临时表来存储结果集,常用于排序和分组查询'
                         }, {                    
