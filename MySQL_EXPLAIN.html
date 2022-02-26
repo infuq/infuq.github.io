@@ -118,7 +118,8 @@ https://element.eleme.cn/#/zh-CN/component/collapse
                       <span style="color:crimson">[ type ]</span>
                     </template>
                     <div>
-                      查询方式<br><br>
+                      连接类型<br><br>
+                      由快到慢 : system > const > eq_ref > ref > range > index > ALL<br><br>
 
                       <template>    
                         <el-table
@@ -233,7 +234,7 @@ https://element.eleme.cn/#/zh-CN/component/collapse
 
                     typeData: [{
                         k1: 'ALL',
-                        k2: '扫描所有数据行'
+                        k2: '全表扫描'
                         }, {                    
                             k1: 'index',
                             k2: '扫描所有索引节点'
@@ -257,15 +258,18 @@ https://element.eleme.cn/#/zh-CN/component/collapse
                             k2: ''          
                         }, {                    
                             k1: 'ref',
-                            k2: '- 通过索引列直接引用到匹配的所有行数据' + '\n' + 
-                                  '- 非唯一索引扫描, 返回匹配的所有行'
+                            k2: '- 通过索引列直接引用匹配的所有行' + '\n' + 
+                                  '- 非主键和非唯一索引扫描, 返回匹配的所有行'
                         }, {                    
                             k1: 'eq_ref',
-                            k2: '- 通过索引列直接引用某1行数据' + '\n' + 
-                                  '- 唯一索引扫描, 对于每个索引键, 表中只有一条记录与之匹配. 常见于主键或唯一索引扫描.'
+                            k2: '- 通过索引列直接引用匹配的唯一一行' + '\n' + 
+                                  '- 主键或非空唯一索引扫描, 对于每个索引键, 表中只有一条记录与之等值匹配'
                         }, {                    
-                            k1: 'const, system, NULL',
-                            k2: ''                                        
+                            k1: 'const',
+                            k2: '常量连接'                                        
+                        }, {                    
+                            k1: 'system',
+                            k2: '系统表, 或少量数据的表. 一般不需要进行磁盘IO'                                        
                     }],
 
                     extraData: [{
