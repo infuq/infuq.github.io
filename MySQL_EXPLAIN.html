@@ -15,12 +15,12 @@
         <link rel="stylesheet" href="https://www.infuq.com/resources/element-ui@2.15.2/index.css"/>
         <link rel="stylesheet" href="https://www.infuq.com/r/libs/font-awesome/4.0.3/css/font-awesome.min.css" media="screen" type="text/css" />
         <link rel="stylesheet" href="https://g.alicdn.com/de/prismplayer/2.8.2/skins/default/aliplayer-min.css"/>
-
+        
         <style>
           .el-table .cell {                    
             text-align: left;
             white-space: pre-line;/*保留换行符*/
-          }
+          };
         </style>
 
     </head>
@@ -193,13 +193,33 @@ https://element.eleme.cn/#/zh-CN/component/collapse
             <span style="color: #e6a23c;">MySQL version : 5.7.37-log</span>
             <br>
             <br>
-            <div class="block">
-              <el-image 
-                style="width: 50%; height: 50%"
-                :src="type_src" 
-                :preview-src-list="type_srcList">
-              </el-image>
-            </div>
+
+
+            <template>    
+              <el-table
+                :data="typeTableData"
+                height="390"
+                stripe
+                style="width: 100%">
+                <el-table-column prop="k1" label="值" width="80">
+                  <template slot-scope="scope">
+                    <div v-html="scope.row.k1"></div>
+                  </template>
+                </el-table-column>
+                <el-table-column prop="k2" label="行数" width="190">
+                  <template slot-scope="scope">
+                    <div v-html="scope.row.k2"></div>
+                  </template>
+                </el-table-column>
+                <el-table-column prop="k3" label="索引">
+                  <template slot-scope="scope">
+                    <div v-html="scope.row.k3"></div>
+                  </template>
+                </el-table-column>
+              </el-table>
+            </template>
+
+            
 
 
             <br>
@@ -211,46 +231,58 @@ https://element.eleme.cn/#/zh-CN/component/collapse
             <span style="color: #F56C6C;">适用于仅匹配一行数据</span>
             <br>
             <br>
-            <a href="https://dev.mysql.com/doc/refman/5.7/en/explain-output.html#jointype_system" style="background-color:white;" target="_blank">MySQL官方对system的说明</a>
+            <a href="https://dev.mysql.com/doc/refman/5.7/en/explain-output.html#jointype_system" style="background-color:transparent;" target="_blank">MySQL官方对system的说明</a>
             
             <br>
             <br>
-            ```<br>
-            create table t (<br>
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;id int(10) primary key,<br>
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;u_name varchar(20),<br>
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;u_year int(5)<br>
-            ) ENGINE=MyISAM;<br>
-            ```<br>
             <br>
-            MyISAM引擎的表t, 表t中只有一条数据, 进行简单查询时<br>
-            样例SQL : <br>
-            select * from t<br>
-            select * from t limit 1<br>
-            select * from t where id=1<br>
-            select * from t where id in (1,2)<br>
-            <br>
-            <br>
-            
-            
+            <div style="background-color: var(--color-canvas-default);
+            border-color: #DCDFE6;
+            border-style: solid;
+            border-width: 1px;
+            border-radius: 6px;
+            padding: 15px;">
+              ```<br>
+              create table t (<br>
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;id int(10) primary key,<br>
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;u_name varchar(20),<br>
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;u_year int(5)<br>
+              ) ENGINE=MyISAM;<br>
+              ```<br>
+              <br>
+              MyISAM引擎的表t, 表t中只有一条数据, 进行简单查询时<br>
+              样例SQL <i class="fa fa-angle-down" aria-hidden="true"></i><br>
+              select * from t<br>
+              select * from t limit 1<br>
+              select * from t where id=1<br>
+              select * from t where id in (1,2)<br><br>
+              <i class="fa fa-bell-o" aria-hidden="true"></i> MyISAM引擎的表
+            </div>
 
             <br>
-            ```<br>
-            create table other (<br>
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;id int(10) primary key,<br>
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;u_name varchar(20),<br>
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;u_year int(5)<br>
-            ) ENGINE=InnoDB;<br>
-            ```<br>
-            <br>
-            当子查询仅返回一条数据时(与表other的引擎类型无关)<br>
-            样例SQL : <br>
-            select * from (select * from other limit 1) t<br>
-            select * from (select * from other where id=1) t<br>
-            select * from (select id from other limit 1) t<br>
-            select * from (select u_name from other limit 1) t<br>
-            select * from (select u_name from other where id=1) t<br>
-            
+            <div style="background-color: var(--color-canvas-default);
+            border-color: #DCDFE6;
+            border-style: solid;
+            border-width: 1px;
+            border-radius: 6px;
+            padding: 15px;">
+              ```<br>
+              create table other (<br>
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;id int(10) primary key,<br>
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;u_name varchar(20),<br>
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;u_year int(5)<br>
+              ) ENGINE=InnoDB;<br>
+              ```<br>
+              <br>
+              当子查询仅返回一条数据时<br>
+              样例SQL <i class="fa fa-angle-down" aria-hidden="true"></i> <br>
+              select * from (select * from other limit 1) t<br>
+              select * from (select * from other where id=1) t<br>
+              select * from (select id from other limit 1) t<br>
+              select * from (select u_name from other limit 1) t<br>
+              select * from (select u_name from other where id=1) t<br><br>
+              <i class="fa fa-bell-o" aria-hidden="true"></i> 与表other的引擎类型无关
+            </div>
             <br>
             <p id="const"></p>
             <el-divider content-position="left">const</el-divider>
@@ -258,68 +290,88 @@ https://element.eleme.cn/#/zh-CN/component/collapse
             <span style="color: #F56C6C;">适用于最多匹配一行数据</span>
             <br>
             <br>
-            <a href="https://dev.mysql.com/doc/refman/5.7/en/explain-output.html#jointype_const" style="background-color:white;" target="_blank">MySQL官方对const的说明</a>
+            <a href="https://dev.mysql.com/doc/refman/5.7/en/explain-output.html#jointype_const" style="background-color:transparent;" target="_blank">MySQL官方对const的说明</a>
             <br>
             
             <br>
-            ```<br>
-            create table t (<br>
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;id int(10),<br>
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;u_name varchar(20),<br>
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;u_year int(5)<br>
-            ) ENGINE=InnoDB;<br>
-            ```
-            <br>
-            alter table t add constraint pk primary key(id)<br>
-            alter table t add constraint uq_name unique key(u_name)<br>
-            <br>
-            根据主键索引或唯一索引进行等值查询, 且条件不参与计算时<br>
-            样例SQL : <br>
-            select * from t where id=1<br>
-            select * from t where id&lt;=>2<br>
-            select * from t where u_name = 'Libai'<br>
-            反例SQL :<br>
-            select * from t where id + 1 = 3<br>
-            <br>
-            <br>
-            <br>
-
-            ```<br>
-            create table t (<br>
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;id int(10) primary key,<br>
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;u_name varchar(20),<br>
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;u_sex varchar(2)<br>     
-            ) ENGINE=InnoDB;<br>
-            ```
-            <br>
-            alter table t add constraint uq_name_sex unique key(u_name,u_sex)<br><br>
-            唯一联合索引全部参与等值比较, 且条件不参与计算时       
-            <br>
-            样例SQL :<br>
-            select * from t where u_name = 'Libai' and u_sex = '1'<br>
-            select * from t where u_name = 'Libai' and u_sex &lt;=> '1'<br>
-            反例SQL :<br>
-            select * from t where u_name = 'Libai'<br>
-            select * from t where u_sex = '1'<br>
+            <div style="background-color: var(--color-canvas-default);
+            border-color: #DCDFE6;
+            border-style: solid;
+            border-width: 1px;
+            border-radius: 6px;
+            padding: 15px;">
+              ```<br>
+              create table t (<br>
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;id int(10),<br>
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;u_name varchar(20),<br>
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;u_year int(5)<br>
+              ) ENGINE=InnoDB;<br>
+              ```
+              <br>
+              alter table t add constraint pk primary key(id)<br>
+              alter table t add constraint uq_name unique key(u_name)<br>
+              <br>
+              根据主键索引或唯一索引进行等值查询, 且条件不参与计算时<br>
+              样例SQL <i class="fa fa-angle-down" aria-hidden="true"></i> <br>
+              select * from t where id=1<br>
+              select * from t where id&lt;=>2<br>
+              select * from t where u_name = 'Libai'<br>
+              反例SQL <i class="fa fa-angle-down" aria-hidden="true"></i><br>
+              select * from t where id + 1 = 3
+            </div>
             <br>
             <br>
-            ```<br>
-            create table t (<br>
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;id int(10),<br>
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;u_name varchar(20),<br>
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;u_year int(5)<br>       
-            ) ENGINE=InnoDB;<br>
-            ```
             <br>
-            alter table t add constraint pk primary key(id,u_name)<br><br>
-            主键联合索引全部参与等值比较, 且条件不参与计算时       <br>
-            样例SQL :<br>
-            select * from t where id=2 and u_name ='Dufu'<br>
-            select * from t where id&lt;=>2 and u_name ='Dufu'<br>
-            反例SQL :<br>
-            select * from t where id=2<br>
-            select * from t where u_name ='Dufu'<br>
-            select * from t where id + 1 = 3 and u_name ='Dufu'<br>
+            <div style="background-color: var(--color-canvas-default);
+            border-color: #DCDFE6;
+            border-style: solid;
+            border-width: 1px;
+            border-radius: 6px;
+            padding: 15px;">
+              ```<br>
+              create table t (<br>
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;id int(10) primary key,<br>
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;u_name varchar(20),<br>
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;u_sex varchar(2)<br>     
+              ) ENGINE=InnoDB;<br>
+              ```
+              <br>
+              alter table t add constraint uq_name_sex unique key(u_name,u_sex)<br><br>
+              唯一联合索引全部参与等值比较, 且条件不参与计算时       
+              <br>
+              样例SQL <i class="fa fa-angle-down" aria-hidden="true"></i><br>
+              select * from t where u_name = 'Libai' and u_sex = '1'<br>
+              select * from t where u_name = 'Libai' and u_sex &lt;=> '1'<br>
+              反例SQL <i class="fa fa-angle-down" aria-hidden="true"></i><br>
+              select * from t where u_name = 'Libai'<br>
+              select * from t where u_sex = '1'
+            </div>
+            <br>
+            <br>
+            <div style="background-color: var(--color-canvas-default);
+            border-color: #DCDFE6;
+            border-style: solid;
+            border-width: 1px;
+            border-radius: 6px;
+            padding: 15px;">
+              ```<br>
+              create table t (<br>
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;id int(10),<br>
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;u_name varchar(20),<br>
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;u_year int(5)<br>       
+              ) ENGINE=InnoDB;<br>
+              ```
+              <br>
+              alter table t add constraint pk primary key(id,u_name)<br><br>
+              主键联合索引全部参与等值比较, 且条件不参与计算时       <br>
+              样例SQL <i class="fa fa-angle-down" aria-hidden="true"></i><br>
+              select * from t where id=2 and u_name ='Dufu'<br>
+              select * from t where id&lt;=>2 and u_name ='Dufu'<br>
+              反例SQL <i class="fa fa-angle-down" aria-hidden="true"></i><br>
+              select * from t where id=2<br>
+              select * from t where u_name ='Dufu'<br>
+              select * from t where id + 1 = 3 and u_name ='Dufu'
+            </div>
             <br><br><br>
 
             <br>
@@ -328,63 +380,77 @@ https://element.eleme.cn/#/zh-CN/component/collapse
             <br>
             <span style="color: #F56C6C;">适用于仅匹配一行数据</span>
             <br><br>
-            <a href="https://dev.mysql.com/doc/refman/5.7/en/explain-output.html#jointype_eq_ref" style="background-color:white;" target="_blank">MySQL官方对eq_ref的说明</a>
+            <a href="https://dev.mysql.com/doc/refman/5.7/en/explain-output.html#jointype_eq_ref" style="background-color:transparent;" target="_blank">MySQL官方对eq_ref的说明</a>
             
             <br>
             <br>
-            ```<br>
-            create table t (<br>
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;id int(10) primary key,<br>
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;u_name varchar(20) <span style="color:red;">not null</span>,<br>
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;u_year int(5)<br>
-            ) ENGINE=InnoDB;<br>
+            <div style="background-color: var(--color-canvas-default);
+            border-color: #DCDFE6;
+            border-style: solid;
+            border-width: 1px;
+            border-radius: 6px;
+            padding: 15px;">
+              ```<br>
+              create table t (<br>
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;id int(10) primary key,<br>
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;u_name varchar(20) <span style="color:red;">NOT NULL</span>,<br>
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;u_year int(5)<br>
+              ) ENGINE=InnoDB;<br>
+              <br>
+              create table other (<br>
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;id int(10) primary key,<br>
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;u_name varchar(20) <span style="color:red;">NOT NULL</span>,<br>
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;u_address varchar(15)<br>
+              ) ENGINE=InnoDB;<br>
+              ```
+              <br>
+              <br>
+              当两张表的数据量比较小,或者两张表的数据量差距不明显时, 在执行计划中没有看到 type = eq_ref , 反而看到了Extra = 'Using where; Using join buffer (Block Nested Loop)'.
+              <br>
+              通过<a href="https://github.com/infuq/infuq-others/blob/master/Python/v_mysql/explain_eq_ref.py" style="background-color:transparent;" target="_blank">样例Python脚本</a>向other表中插入批量数据. 让两张表的数据量存在较大差距.
+              <br><br>
+              
+              alter table t add constraint uq_name unique key(u_name)<br>
+              alter table other add constraint uq_name unique key(u_name)<br>
+              <br>
+              
+              根据主键索引或非空唯一索引进行join等值查询时, 且条件不参与计算<br>
+              
+              <br>
+              可使用的操作符: = 或者 &lt;=><br>
+              样例SQL <i class="fa fa-angle-down" aria-hidden="true"></i><br>
+              select * from t,other where t.id = other.id<br>
+              select * from other,t where t.id = other.id<br>
+              select * from t left join other on t.id &lt;=> other.id<br>
+              select * from t left join other on t.id = other.id<br>
+              select * from other right join t on t.id = other.id<br>
+              select * from other inner join t on t.id = other.id<br>
+              select * from t inner join other on t.id = other.id<br>
+              反例SQL <i class="fa fa-angle-down" aria-hidden="true"></i><br>
+              select * from t,other where t.id - other.id = 0<br>
+              select * from other inner join t on t.id - other.id = 0
+            </div>
             <br>
-            create table other (<br>
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;id int(10) primary key,<br>
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;u_name varchar(20) <span style="color:red;">not null</span>,<br>
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;u_address varchar(15)<br>
-            ) ENGINE=InnoDB;<br>
-            ```
             <br>
             <br>
-            当两张表的数据量比较小,或者两张表的数据量差距不明显时, 在执行计划中没有看到 type = eq_ref , 反而看到了Extra = 'Using where; Using join buffer (Block Nested Loop)'.
-            <br>
-            通过<a href="https://github.com/infuq/infuq-others/blob/master/Python/v_mysql/explain_eq_ref.py" style="background-color:white;" target="_blank">样例Python脚本</a>向other表中插入批量数据. 让两张表的数据量存在较大差距.
-            <br><br>
-            
-            alter table t add constraint uq_name unique key(u_name)<br>
-            alter table other add constraint uq_name unique key(u_name)<br>
-            <br>
-            
-            根据主键索引或非空唯一索引进行join等值查询时, 且条件不参与计算<br>
-            
-            <br>
-            可使用的操作符: = 或者 &lt;=><br>
-            样例SQL :<br>
-            select * from t,other where t.id = other.id<br>
-            select * from other,t where t.id = other.id<br>
-            select * from t left join other on t.id &lt;=> other.id<br>
-            select * from t left join other on t.id = other.id<br>
-            select * from other right join t on t.id = other.id<br>
-            select * from other inner join t on t.id = other.id<br>
-            select * from t inner join other on t.id = other.id<br>
-            反例SQL :<br>
-            select * from t,other where t.id - other.id = 0<br>
-            select * from other inner join t on t.id - other.id = 0<br>
-            <br>
-            <br>
-            <br>
-            根据联合索引(包括主键联合索引或非空唯一联合索引)进行join等值查询时, 且条件不参与计算<br>
-            alter table t add constraint uq_id_name unique key(id,u_name)<br>
-            alter table other add constraint uq_id_name unique key(id,u_name)<br>
-            或<br>
-            alter table t add constraint pk_id primary key(id)<br>
-            alter table other add constraint uq_id_name unique key(id,u_name)<br>
-            <br>
-            可使用的操作符: = <br>
-            样例SQL :<br>
-            select * from t,other where t.id = other.id and t.u_name=other.u_name<br>
-            select * from t,other where t.id = other.id and 'Libai'=other.u_name<br>
+            <div style="background-color: var(--color-canvas-default);
+            border-color: #DCDFE6;
+            border-style: solid;
+            border-width: 1px;
+            border-radius: 6px;
+            padding: 15px;">
+              根据联合索引(包括主键联合索引或非空唯一联合索引)进行join等值查询时, 且条件不参与计算<br>
+              alter table t add constraint uq_id_name unique key(id,u_name)<br>
+              alter table other add constraint uq_id_name unique key(id,u_name)<br>
+              或<br>
+              alter table t add constraint pk_id primary key(id)<br>
+              alter table other add constraint uq_id_name unique key(id,u_name)<br>
+              <br>
+              可使用的操作符: = <br>
+              样例SQL <i class="fa fa-angle-down" aria-hidden="true"></i><br>
+              select * from t,other where t.id = other.id and t.u_name=other.u_name<br>
+              select * from t,other where t.id = other.id and 'Libai'=other.u_name
+            </div>
             <br>
 
             <br>
@@ -393,43 +459,50 @@ https://element.eleme.cn/#/zh-CN/component/collapse
             <br>
             <span style="color: #F56C6C;">匹配多行数据</span>
             <br><br>
-            <a href="https://dev.mysql.com/doc/refman/5.7/en/explain-output.html#jointype_ref" style="background-color:white;" target="_blank">MySQL官方对ref的说明</a>
+            <a href="https://dev.mysql.com/doc/refman/5.7/en/explain-output.html#jointype_ref" style="background-color:transparent;" target="_blank">MySQL官方对ref的说明</a>
             <br>
             
             <br>
-            ```<br>
-            create table t (<br>
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;id int(10) primary key,<br>
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;u_name varchar(20),<br>
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;u_year int(5)<br>            
-            ) ENGINE=InnoDB;<br>
-            <br>
-            create table other (<br>
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;id int(10) primary key,<br>
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;u_name varchar(20),<br>
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;u_address varchar(20)<br>            
-            ) ENGINE=InnoDB;<br>
-            ```
-            <br>
+            <div style="background-color: var(--color-canvas-default);
+            border-color: #DCDFE6;
+            border-style: solid;
+            border-width: 1px;
+            border-radius: 6px;
+            padding: 15px;">
+              ```<br>
+              create table t (<br>
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;id int(10) primary key,<br>
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;u_name varchar(20),<br>
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;u_year int(5)<br>            
+              ) ENGINE=InnoDB;<br>
+              <br>
+              create table other (<br>
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;id int(10) primary key,<br>
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;u_name varchar(20),<br>
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;u_address varchar(20)<br>            
+              ) ENGINE=InnoDB;<br>
+              ```
+              <br>
 
-            alter table t add constraint uq_name unique key(u_name)<br>
-            alter table other add constraint uq_name unique key(u_name)<br>
-            <br>
-            alter table t add constraint idx_name index(u_name)<br>        
-            alter table other add constraint idx_name index(u_name)<br><br><br>
-            
-            唯一索引(不是非空唯一索引)或普通索引进行等值查询时<br>
-            可使用的操作符: = 或者 &lt;=><br>
-            样例SQL :<br>
-            select * from t,other where t.u_name=other.u_name<br>
-            select * from t right join other on t.u_name=other.u_name<br>
-            select * from t right join other on t.u_name&lt;=>other.u_name<br>
-            select * from t inner join other on t.u_name=other.u_name<br>
-            select * from t left join other on t.u_name=other.u_name<br>
-            select * from other left join t on t.u_name=other.u_name<br>
-            select * from t where u_name='Libai'<br>
-            <br>
-            联合索引亦符合以上结论.
+              alter table t add constraint uq_name unique key(u_name)<br>
+              alter table other add constraint uq_name unique key(u_name)<br>
+              <br>
+              alter table t add constraint idx_name index(u_name)<br>        
+              alter table other add constraint idx_name index(u_name)<br><br><br>
+              
+              唯一索引(不是非空唯一索引)或普通索引进行等值查询时<br>
+              可使用的操作符: = 或者 &lt;=><br>
+              样例SQL <i class="fa fa-angle-down" aria-hidden="true"></i><br>
+              select * from t,other where t.u_name=other.u_name<br>
+              select * from t right join other on t.u_name=other.u_name<br>
+              select * from t right join other on t.u_name&lt;=>other.u_name<br>
+              select * from t inner join other on t.u_name=other.u_name<br>
+              select * from t left join other on t.u_name=other.u_name<br>
+              select * from other left join t on t.u_name=other.u_name<br>
+              select * from t where u_name='Libai'<br>
+              <br>
+              联合索引亦符合以上结论.
+            </div>
             <br>
             <br>
             <p id="range"></p>
@@ -437,11 +510,18 @@ https://element.eleme.cn/#/zh-CN/component/collapse
             <br>
             <span style="color: #F56C6C;">匹配多行数据</span>
             <br><br>
-            <a href="https://dev.mysql.com/doc/refman/5.7/en/explain-output.html#jointype_range" style="background-color:white;" target="_blank">MySQL官方对range的说明</a>
+            <a href="https://dev.mysql.com/doc/refman/5.7/en/explain-output.html#jointype_range" style="background-color:transparent;" target="_blank">MySQL官方对range的说明</a>
             <br><br>  
-            作用于索引列
-            <br><br>
-            =, &lt;>, >, >=, &lt;, &lt;=, IS NULL, &lt;=>, BETWEEN, LIKE, or IN()
+            <div style="background-color: var(--color-canvas-default);
+            border-color: #DCDFE6;
+            border-style: solid;
+            border-width: 1px;
+            border-radius: 6px;
+            padding: 15px;">
+              作用于索引列
+              <br><br>
+              =, &lt;>, >, >=, &lt;, &lt;=, IS NULL, &lt;=>, BETWEEN, LIKE, or IN()
+            </div>
 <br>
 <br>
 
@@ -451,7 +531,7 @@ https://element.eleme.cn/#/zh-CN/component/collapse
             <br>
             <span style="color: #F56C6C;">扫描所有索引节点</span>
             <br><br>
-            <a href="https://dev.mysql.com/doc/refman/5.7/en/explain-output.html#jointype_index" style="background-color:white;" target="_blank">MySQL官方对index的说明</a>
+            <a href="https://dev.mysql.com/doc/refman/5.7/en/explain-output.html#jointype_index" style="background-color:transparent;" target="_blank">MySQL官方对index的说明</a>
             <br>
             <br>
             <br>
@@ -460,7 +540,7 @@ https://element.eleme.cn/#/zh-CN/component/collapse
             <br>
             <span style="color: #F56C6C;">全表扫描</span>
             <br><br>
-            <a href="https://dev.mysql.com/doc/refman/5.7/en/explain-output.html#jointype_all" style="background-color:white;" target="_blank">MySQL官方对all的说明</a>
+            <a href="https://dev.mysql.com/doc/refman/5.7/en/explain-output.html#jointype_all" style="background-color:transparent;" target="_blank">MySQL官方对ALL的说明</a>
             <br>
             <br>
             <br>
@@ -473,6 +553,11 @@ https://element.eleme.cn/#/zh-CN/component/collapse
                 深耕 & 浅尝辄止<br>
 
 
+                
+            <!-- 回到顶部 -->
+            <template>
+              <el-backtop ></el-backtop>
+            </template>
 
 
         </div>
@@ -480,10 +565,12 @@ https://element.eleme.cn/#/zh-CN/component/collapse
 
     <!-- 尾部 -->
     <script language="javascript" type="text/javascript" src="r/js/footer.js"></script>
-	<script charset="utf-8" type="text/javascript" src="https://g.alicdn.com/de/prismplayer/2.8.2/aliplayer-min.js"></script>
+	  <script charset="utf-8" type="text/javascript" src="https://g.alicdn.com/de/prismplayer/2.8.2/aliplayer-min.js"></script>
     <script src="https://www.infuq.com/resources/vue@2.6.14/vue.js"></script>
     <script src="https://www.infuq.com/resources/element-ui@2.15.2/index.js"></script>
     <script src="https://www.infuq.com/resources/axios@0.21.1/axios.min.js"></script>
+
+
     <script type="text/javascript">
         const { defineComponent } = Vue
         const { h } = Vue;
@@ -492,12 +579,45 @@ https://element.eleme.cn/#/zh-CN/component/collapse
                 return {
                   // v2Names: ['5','7','9','10'],
                   v2Names: [],
-                  type_src: 'https://infuq.github.io/r/img/2022-2-27-1.png',
-                  type_srcList: [
-                  'https://infuq.github.io/r/img/2022-2-27-1.png',
-                  ],
                   
-
+                  typeTableData: [
+                    {
+                      k1: '<a href="#system" style="background-color:transparent;" >system</a>',
+                      k2: '适用于仅匹配一行数据',
+                      k3: ''
+                    }, 
+                    {                    
+                      k1: '<a href="#const" style="background-color:transparent;" >const</a>',
+                      k2: '适用于最多匹配一行数据',
+                      k3: '主键索引或唯一索引进行等值查询'
+                    },
+                    {
+                      k1: '<a href="#eq_ref" style="background-color:transparent;">eq_ref</a>',
+                      k2: '适用于仅匹配一行数据',
+                      k3: '主键索引或非空唯一索引进行JOIN等值查询'
+                    }, 
+                    {                    
+                      k1: '<a href="#ref" style="background-color:transparent;">ref</a>',
+                      k2: '匹配多行数据',
+                      k3: '唯一索引或普通索引进行等值查询'
+                    },
+                    {
+                      k1: '<a href="#range" style="background-color:transparent;">range</a>',
+                      k2: '匹配多行数据',
+                      k3: '索引范围查询'
+                    }, 
+                    {                    
+                      k1: '<a href="#index" style="background-color:transparent;">index</a>',
+                      k2: '索引树扫描',
+                      k3: ''
+                    },
+                    {                    
+                      k1: '<a href="#ALL" style="background-color:transparent;">ALL</a>',
+                      k2: '全表扫描',
+                      k3: ''
+                    }
+                  
+                  ],
 
 
                   tableData: [{
