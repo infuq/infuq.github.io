@@ -402,17 +402,13 @@ https://element.eleme.cn/#/zh-CN/component/collapse
               ) ENGINE=InnoDB;<br>
               ```
               <br>
-              <br>
-              当两张表的数据量比较小,或者两张表的数据量差距不明显时, 在执行计划中没有看到 type = eq_ref , 反而看到了Extra = 'Using where; Using join buffer (Block Nested Loop)'.
-              <br>
-              通过<a href="https://github.com/infuq/infuq-others/blob/master/Python/v_mysql/explain_eq_ref.py" style="background-color:transparent;" target="_blank">样例Python脚本</a>向other表中插入批量数据. 让两张表的数据量存在较大差距.
-              <br><br>
+
               
               alter table t add constraint uq_name unique key(u_name)<br>
               alter table other add constraint uq_name unique key(u_name)<br>
               <br>
               
-              根据主键索引或非空唯一索引进行join等值查询时, 且条件不参与计算<br>
+              根据主键索引或非空唯一索引进行join等值查询, 且条件不参与计算时<br>
               
               <br>
               可使用的操作符: = 或者 &lt;=><br>
@@ -437,7 +433,7 @@ https://element.eleme.cn/#/zh-CN/component/collapse
             border-width: 1px;
             border-radius: 6px;
             padding: 15px;">
-              根据联合索引(包括主键联合索引或非空唯一联合索引)进行join等值查询时, 且条件不参与计算<br>
+              根据联合索引(包括主键联合索引或非空唯一联合索引)进行join等值查询, 且条件不参与计算时<br>
               alter table t add constraint uq_id_name unique key(id,u_name)<br>
               alter table other add constraint uq_id_name unique key(id,u_name)<br>
               或<br>
