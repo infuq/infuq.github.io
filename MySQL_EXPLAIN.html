@@ -167,14 +167,15 @@ https://element.eleme.cn/#/zh-CN/component/collapse
                           :data="extraData"
                           stripe
                           style="width: 100%">
-                          <el-table-column
-                              prop="k1"
-                              label="值"
-                              width="220">
+                          <el-table-column prop="k1" label="值" width="220">
+                            <template slot-scope="scope">
+                              <div v-html="scope.row.k1"></div>
+                            </template>
                           </el-table-column>
-                          <el-table-column
-                              prop="k2"
-                              label="描述">
+                          <el-table-column prop="k2" label="描述">
+                            <template slot-scope="scope">
+                              <div v-html="scope.row.k2"></div>
+                            </template>
                           </el-table-column>
                         </el-table>
                       </template>
@@ -188,9 +189,6 @@ https://element.eleme.cn/#/zh-CN/component/collapse
 <br>
 
             <span class="link">EXPLAIN Join Types</span>
-            <br>
-            <br>
-            <span style="color: #e6a23c;">MySQL version : 5.7.37-log</span>
             <br>
             <br>
 
@@ -547,10 +545,75 @@ https://element.eleme.cn/#/zh-CN/component/collapse
             <br>
             <br>
 
+            <span class="link">EXPLAIN Extra</span>
+            <br>
+            <br>
+            <div style="background-color: var(--color-canvas-default);
+            border-color: #DCDFE6;
+            border-style: solid;
+            border-width: 1px;
+            border-radius: 6px;
+            padding: 15px;">
 
-                <p style="height: 100px;"></p>
-                人生除了眼前的苟且, 还有C++和远方.<br>
-                深耕 & 浅尝辄止<br>
+            ```<br>
+            create table t (<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;id int(10) primary key,<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;u_name varchar(20),<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;u_year int(5),<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;u_address varchar(20)<br>
+            ) ENGINE=InnoDB;    <br>        
+            ```<br>
+            create index idx_name_year on t(u_name,u_year);<br>
+
+<br>
+<br>
+<p id="Using index"></p>
+<i class="fa fa-terminal" aria-hidden="true"></i> Using index<br>
+查询的列被索引覆盖, 且WHERE条件满足索引的最左前缀匹配原则时<br>
+explain select u_name,u_year from t where u_name = 'Libai'<br>
+explain select u_name,u_year from t where u_name = 'Libai' and u_year = 2021<br>
+<br><br><br>
+<p id="Using where; Using index"></p>
+<i class="fa fa-terminal" aria-hidden="true"></i> Using where; Using index<br>
+查询的列被索引覆盖, 但WHERE条件不满足索引最左前缀匹配原则时<br>
+explain select u_name,u_year from t where u_year=2021<br>
+explain select u_name,u_year from t where u_year>2021<br>
+查询的列被索引覆盖, 且WHERE条件使用索引的前导列的范围<br>
+explain select u_name,u_year from t where u_name > 'Libai'<br>
+<br><br><br>
+<p id="Using index condition"></p>
+<i class="fa fa-terminal" aria-hidden="true"></i> Using index condition<br>
+查询的列未被索引覆盖, 且WHERE条件使用索引的前导列的范围<br>
+explain select u_name,u_year,u_address from t where u_name > 'Libai'<br>
+查询的列未被索引覆盖, 且WHERE条件不完全使用覆盖索引<br>
+explain select * from t where u_name = 'Libai' and u_year > 2020<br>
+<br><br><br>
+<p id="Using where"></p>
+<i class="fa fa-terminal" aria-hidden="true"></i> Using where<br>
+查询的列未被索引覆盖, 且WHERE条件不满足索引最左前缀匹配原则时<br>
+explain select * from t where u_year=2021<br>
+explain select * from t where u_year>2021<br>
+查询的列未被索引覆盖, 且WHERE条件使用非索引列<br>
+explain select * from t where u_address='sichuan'<br>
+<br><br><br>
+<p id="Extra = NULL"></p>
+<i class="fa fa-terminal" aria-hidden="true"></i> Extra = NULL<br>
+查询的列未被索引覆盖, 且WHERE条件满足索引的最左前缀匹配原则时<br>
+explain select * from t where u_name = 'Libai'<br>
+explain select u_name,u_year,u_address from t where u_name = 'Libai'<br>
+<i class="fa fa-bell-o" aria-hidden="true"></i> 虽然用到了索引, 但是部分字段未被索引覆盖, 必须回表
+            </div>
+            <br>
+            <br>
+            <br>
+            <br>
+            <br>
+            <br>
+
+
+            <p style="height: 100px;"></p>
+            人生除了眼前的苟且, 还有C++和远方.<br>
+            深耕 & 浅尝辄止<br>
 
 
                 
@@ -608,13 +671,13 @@ https://element.eleme.cn/#/zh-CN/component/collapse
                     }, 
                     {                    
                       k1: '<a href="#index" style="background-color:transparent;">index</a>',
-                      k2: '索引树扫描',
-                      k3: ''
+                      k2: '',
+                      k3: '索引树扫描'
                     },
                     {                    
                       k1: '<a href="#ALL" style="background-color:transparent;">ALL</a>',
-                      k2: '全表扫描',
-                      k3: ''
+                      k2: '',
+                      k3: '全表扫描'
                     }
                   
                   ],
@@ -675,25 +738,25 @@ https://element.eleme.cn/#/zh-CN/component/collapse
                   }],
                   
                   extraData: [{
-                      k1: 'using index',
-                      k2: '表示相应的SELECT操作中使用了覆盖索引'
+                      k1: '<a href="#Using index">Using index</a>',
+                      k2: ''
                       }, {                    
-                          k1: 'using where',
+                          k1: '<a href="#Using where; Using index">Using where; Using index</a>',
                           k2: ''
                       }, {                    
-                          k1: 'using where; using index',
+                          k1: '<a href="#Using index condition">Using index condition</a>',
                           k2: ''
                       },{                    
-                          k1: 'using index condition',
+                          k1: '<a href="#Using where">Using where</a>',
                           k2: ''
                       },{                    
+                          k1: '<a href="#Extra = NULL">Extra = NULL</a>',
+                          k2: ''
+                      }, {                    
                           k1: 'using temporary',
-                          k2: 'MySQL需要使用临时表来存储结果集,常用于排序和分组查询'
+                          k2: ''            
                       }, {                    
                           k1: 'using filesort',
-                          k2: 'MySQL无法使用索引完成的排序操作称为\'文件排序\''            
-                      }, {                    
-                          k1: 'range checked for each recond',
                           k2: ''                                        
                   }]
 
