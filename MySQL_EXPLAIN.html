@@ -114,26 +114,25 @@ https://element.eleme.cn/#/zh-CN/component/collapse
                   </el-collapse-item>
                   <el-collapse-item name="7">
                     <template slot="title">
-                      <!-- <i class="el-icon-magic-stick"></i> -->
                       <span style="color:crimson">[ type ] *</span>
                     </template>
                     <div>
                       连接类型<br><br>
                       由快到慢 : system > const > eq_ref > ref > range > index > ALL<br><br>
 
+                      <!-- https://www.cnblogs.com/zhuang229/p/11754408.html -->
                       <template>    
-                        <el-table
-                          :data="typeData"
-                          stripe
-                          style="width: 100%">
-                          <el-table-column
-                              prop="k1"
-                              label="值"
-                              width="180">
+                        <el-table :data="typeData" stripe style="width: 100%">
+                          
+                          <el-table-column prop="k1" label="值" width="180">
+                            <template slot-scope="scope">
+                              <div v-html="scope.row.k1"></div>
+                            </template>
                           </el-table-column>
-                          <el-table-column
-                              prop="k2"
-                              label="描述">
+                          <el-table-column prop="k2" label="描述" >
+                            <template slot-scope="scope">
+                              <div v-html="scope.row.k2"></div>
+                            </template>
                           </el-table-column>
                         </el-table>
                       </template>
@@ -194,128 +193,279 @@ https://element.eleme.cn/#/zh-CN/component/collapse
             <span style="color: #e6a23c;">MySQL version : 5.7.37-log</span>
             <br>
             <br>
+            <div class="block">
+              <el-image 
+                style="width: 50%; height: 50%"
+                :src="type_src" 
+                :preview-src-list="type_srcList">
+              </el-image>
+            </div>
+
+
+            <br>
+            <br>
+            <br>
+            <p id="system"></p>
             <el-divider content-position="left">system</el-divider>
             <br>
-            查看MySQL官方对system的<a href="https://dev.mysql.com/doc/refman/5.7/en/explain-output.html#jointype_system" style="background-color:white;" target="_blank">说明</a>
+            <span style="color: #F56C6C;">适用于仅匹配一行数据</span>
+            <br>
+            <br>
+            <a href="https://dev.mysql.com/doc/refman/5.7/en/explain-output.html#jointype_system" style="background-color:white;" target="_blank">MySQL官方对system的说明</a>
             
             <br>
             <br>
-            <i class="fa fa-tags" aria-hidden="true"></i> 案例一
-            <br><br>
-            首先创建两张表<br><br>
-            <div class="block">
-              <el-image 
-                style="width: 50%; height: 50%"
-                :src="creata_table_src" 
-                :preview-src-list="creata_table_srcList">
-              </el-image>
-            </div>
+            ```<br>
+            create table t (<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;id int(10) primary key,<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;u_name varchar(20),<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;u_year int(5)<br>
+            ) ENGINE=MyISAM;<br>
+            ```<br>
             <br>
-            除了表名称不同之外, 它们所使用的执行引擎也不同 .<br><br>
-            接下来分别向两张表中各插入一条数据
-            <br>
-            <br>
-            <div class="block">
-              <el-image 
-                style="width: 50%; height: 50%"
-                :src="insert_table_src" 
-                :preview-src-list="insert_table_srcList">
-              </el-image>
-            </div>
-            <br>
-            查看执行计划
-            <br>
-            <br>
-            <div class="block">
-              <el-image 
-                style="width: 50%; height: 50%"
-                :src="explain_table_src" 
-                :preview-src-list="explain_table_srcList">
-              </el-image>
-            </div>
-            <br>
-            再向表中各插入一条数据, 每个表中各有2条数据 .
-            <br>
-            <br>
-            <div class="block">
-              <el-image 
-                style="width: 50%; height: 50%"
-                :src="again_insert_table_src" 
-                :preview-src-list="again_insert_table_srcList">
-              </el-image>
-            </div>
-            <br>
-            再次查看执行计划
-            <br>
-            <br>
-            <div class="block">
-              <el-image 
-                style="width: 50%; height: 50%"
-                :src="again_explain_table_src" 
-                :preview-src-list="again_explain_table_srcList">
-              </el-image>
-            </div>
+            MyISAM引擎的表t, 表t中只有一条数据, 进行简单查询时<br>
+            样例SQL : <br>
+            select * from t<br>
+            select * from t limit 1<br>
+            select * from t where id=1<br>
+            select * from t where id in (1,2)<br>
             <br>
             <br>
             
-            <span style="color: #67c23a;">结论</span>
-            <br>
-            MyISAM引擎的表, 表中只有一条数据, 进行简单查询时, 则type = system <br>
-            <br>
-            <br>
-            <i class="fa fa-tags" aria-hidden="true"></i> 案例二
-            <br><br>
-            紧接着上面的实验, 使用子查询
-            <br>
-            <br>
-            <div class="block">
-              <el-image 
-                style="width: 50%; height: 50%"
-                :src="sub_query_explain_table_src" 
-                :preview-src-list="sub_query_explain_table_srcList">
-              </el-image>
-            </div>
-            <br>
-
-            内层子查询返回一张临时表(仅包含一条数据), 外层从临时表查询, 其type = system <br>    
-            <br><br>
-            我们再次向表中各插入一条数据, 每张表各3条记录
-            <br><br>
-            <div class="block">
-              <el-image 
-                style="width: 50%; height: 50%"
-                :src="three_record_table_src" 
-                :preview-src-list="three_record_table_srcList">
-              </el-image>
-            </div>
-            <br>
-            如果子查询返回多条数据呢? 查看执行计划<br><br>
-            <div class="block">
-              <el-image 
-                style="width: 50%; height: 50%"
-                :src="three_record_explain_table_src" 
-                :preview-src-list="three_record_explain_table_srcList">
-              </el-image>
-            </div>
-            <br>
-
-
-
-
-
-            <br>
-            <span style="color: #67c23a;">结论</span>
-            <br>
-            子查询仅返回一条数据时, 则外层查询的type = system <br>
             
 
+            <br>
+            ```<br>
+            create table other (<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;id int(10) primary key,<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;u_name varchar(20),<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;u_year int(5)<br>
+            ) ENGINE=InnoDB;<br>
+            ```<br>
+            <br>
+            当子查询仅返回一条数据时(与表other的引擎类型无关)<br>
+            样例SQL : <br>
+            select * from (select * from other limit 1) t<br>
+            select * from (select * from other where id=1) t<br>
+            select * from (select id from other limit 1) t<br>
+            select * from (select u_name from other limit 1) t<br>
+            select * from (select u_name from other where id=1) t<br>
+            
+            <br>
+            <p id="const"></p>
+            <el-divider content-position="left">const</el-divider>
+            <br>
+            <span style="color: #F56C6C;">适用于最多匹配一行数据</span>
+            <br>
+            <br>
+            <a href="https://dev.mysql.com/doc/refman/5.7/en/explain-output.html#jointype_const" style="background-color:white;" target="_blank">MySQL官方对const的说明</a>
+            <br>
+            
+            <br>
+            ```<br>
+            create table t (<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;id int(10),<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;u_name varchar(20),<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;u_year int(5)<br>
+            ) ENGINE=InnoDB;<br>
+            ```
+            <br>
+            alter table t add constraint pk primary key(id)<br>
+            alter table t add constraint uq_name unique key(u_name)<br>
+            <br>
+            根据主键索引或唯一索引进行等值查询, 且条件不参与计算时<br>
+            样例SQL : <br>
+            select * from t where id=1<br>
+            select * from t where id&lt;=>2<br>
+            select * from t where u_name = 'Libai'<br>
+            反例SQL :<br>
+            select * from t where id + 1 = 3<br>
+            <br>
+            <br>
+            <br>
 
+            ```<br>
+            create table t (<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;id int(10) primary key,<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;u_name varchar(20),<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;u_sex varchar(2)<br>     
+            ) ENGINE=InnoDB;<br>
+            ```
+            <br>
+            alter table t add constraint uq_name_sex unique key(u_name,u_sex)<br><br>
+            唯一联合索引全部参与等值比较, 且条件不参与计算时       
+            <br>
+            样例SQL :<br>
+            select * from t where u_name = 'Libai' and u_sex = '1'<br>
+            select * from t where u_name = 'Libai' and u_sex &lt;=> '1'<br>
+            反例SQL :<br>
+            select * from t where u_name = 'Libai'<br>
+            select * from t where u_sex = '1'<br>
+            <br>
+            <br>
+            ```<br>
+            create table t (<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;id int(10),<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;u_name varchar(20),<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;u_year int(5)<br>       
+            ) ENGINE=InnoDB;<br>
+            ```
+            <br>
+            alter table t add constraint pk primary key(id,u_name)<br><br>
+            主键联合索引全部参与等值比较, 且条件不参与计算时       <br>
+            样例SQL :<br>
+            select * from t where id=2 and u_name ='Dufu'<br>
+            select * from t where id&lt;=>2 and u_name ='Dufu'<br>
+            反例SQL :<br>
+            select * from t where id=2<br>
+            select * from t where u_name ='Dufu'<br>
+            select * from t where id + 1 = 3 and u_name ='Dufu'<br>
+            <br><br><br>
 
+            <br>
+            <p id="eq_ref"></p>
+            <el-divider content-position="left">eq_ref</el-divider>
+            <br>
+            <span style="color: #F56C6C;">适用于仅匹配一行数据</span>
+            <br><br>
+            <a href="https://dev.mysql.com/doc/refman/5.7/en/explain-output.html#jointype_eq_ref" style="background-color:white;" target="_blank">MySQL官方对eq_ref的说明</a>
+            
+            <br>
+            <br>
+            ```<br>
+            create table t (<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;id int(10) primary key,<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;u_name varchar(20) <span style="color:red;">not null</span>,<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;u_year int(5)<br>
+            ) ENGINE=InnoDB;<br>
+            <br>
+            create table other (<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;id int(10) primary key,<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;u_name varchar(20) <span style="color:red;">not null</span>,<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;u_address varchar(15)<br>
+            ) ENGINE=InnoDB;<br>
+            ```
+            <br>
+            <br>
+            当两张表的数据量比较小,或者两张表的数据量差距不明显时, 在执行计划中没有看到 type = eq_ref , 反而看到了Extra = 'Using where; Using join buffer (Block Nested Loop)'.
+            <br>
+            通过<a href="https://github.com/infuq/infuq-others/blob/master/Python/v_mysql/explain_eq_ref.py" style="background-color:white;" target="_blank">样例Python脚本</a>向other表中插入批量数据. 让两张表的数据量存在较大差距.
+            <br><br>
+            
+            alter table t add constraint uq_name unique key(u_name)<br>
+            alter table other add constraint uq_name unique key(u_name)<br>
+            <br>
+            
+            根据主键索引或非空唯一索引进行join等值查询时, 且条件不参与计算<br>
+            
+            <br>
+            可使用的操作符: = 或者 &lt;=><br>
+            样例SQL :<br>
+            select * from t,other where t.id = other.id<br>
+            select * from other,t where t.id = other.id<br>
+            select * from t left join other on t.id &lt;=> other.id<br>
+            select * from t left join other on t.id = other.id<br>
+            select * from other right join t on t.id = other.id<br>
+            select * from other inner join t on t.id = other.id<br>
+            select * from t inner join other on t.id = other.id<br>
+            反例SQL :<br>
+            select * from t,other where t.id - other.id = 0<br>
+            select * from other inner join t on t.id - other.id = 0<br>
+            <br>
+            <br>
+            <br>
+            根据联合索引(包括主键联合索引或非空唯一联合索引)进行join等值查询时, 且条件不参与计算<br>
+            alter table t add constraint uq_id_name unique key(id,u_name)<br>
+            alter table other add constraint uq_id_name unique key(id,u_name)<br>
+            或<br>
+            alter table t add constraint pk_id primary key(id)<br>
+            alter table other add constraint uq_id_name unique key(id,u_name)<br>
+            <br>
+            可使用的操作符: = <br>
+            样例SQL :<br>
+            select * from t,other where t.id = other.id and t.u_name=other.u_name<br>
+            select * from t,other where t.id = other.id and 'Libai'=other.u_name<br>
+            <br>
 
+            <br>
+            <p id="ref"></p>
+            <el-divider content-position="left">ref</el-divider>
+            <br>
+            <span style="color: #F56C6C;">匹配多行数据</span>
+            <br><br>
+            <a href="https://dev.mysql.com/doc/refman/5.7/en/explain-output.html#jointype_ref" style="background-color:white;" target="_blank">MySQL官方对ref的说明</a>
+            <br>
+            
+            <br>
+            ```<br>
+            create table t (<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;id int(10) primary key,<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;u_name varchar(20),<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;u_year int(5)<br>            
+            ) ENGINE=InnoDB;<br>
+            <br>
+            create table other (<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;id int(10) primary key,<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;u_name varchar(20),<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;u_address varchar(20)<br>            
+            ) ENGINE=InnoDB;<br>
+            ```
+            <br>
 
+            alter table t add constraint uq_name unique key(u_name)<br>
+            alter table other add constraint uq_name unique key(u_name)<br>
+            <br>
+            alter table t add constraint idx_name index(u_name)<br>        
+            alter table other add constraint idx_name index(u_name)<br><br><br>
+            
+            唯一索引(不是非空唯一索引)或普通索引进行等值查询时<br>
+            可使用的操作符: = 或者 &lt;=><br>
+            样例SQL :<br>
+            select * from t,other where t.u_name=other.u_name<br>
+            select * from t right join other on t.u_name=other.u_name<br>
+            select * from t right join other on t.u_name&lt;=>other.u_name<br>
+            select * from t inner join other on t.u_name=other.u_name<br>
+            select * from t left join other on t.u_name=other.u_name<br>
+            select * from other left join t on t.u_name=other.u_name<br>
+            select * from t where u_name='Libai'<br>
+            <br>
+            联合索引亦符合以上结论.
+            <br>
+            <br>
+            <p id="range"></p>
+            <el-divider content-position="left">range</el-divider>
+            <br>
+            <span style="color: #F56C6C;">匹配多行数据</span>
+            <br><br>
+            <a href="https://dev.mysql.com/doc/refman/5.7/en/explain-output.html#jointype_range" style="background-color:white;" target="_blank">MySQL官方对range的说明</a>
+            <br><br>  
+            作用于索引列
+            <br><br>
+            =, &lt;>, >, >=, &lt;, &lt;=, IS NULL, &lt;=>, BETWEEN, LIKE, or IN()
 <br>
 <br>
+
 <br>
+            <p id="index"></p>
+            <el-divider content-position="left">index</el-divider>
+            <br>
+            <span style="color: #F56C6C;">扫描所有索引节点</span>
+            <br><br>
+            <a href="https://dev.mysql.com/doc/refman/5.7/en/explain-output.html#jointype_index" style="background-color:white;" target="_blank">MySQL官方对index的说明</a>
+            <br>
+            <br>
+            <br>
+            <p id="ALL"></p>
+            <el-divider content-position="left">ALL</el-divider>
+            <br>
+            <span style="color: #F56C6C;">全表扫描</span>
+            <br><br>
+            <a href="https://dev.mysql.com/doc/refman/5.7/en/explain-output.html#jointype_all" style="background-color:white;" target="_blank">MySQL官方对all的说明</a>
+            <br>
+            <br>
+            <br>
+            <br>
+            <br>
 
 
                 <p style="height: 100px;"></p>
@@ -342,41 +492,13 @@ https://element.eleme.cn/#/zh-CN/component/collapse
                 return {
                   // v2Names: ['5','7','9','10'],
                   v2Names: [],
-                  creata_table_src: 'https://infuq.github.io/r/img/2022-2-26-1.png',
-                  creata_table_srcList: [
-                  'https://infuq.github.io/r/img/2022-2-26-1.png',
-                  ],
-                  insert_table_src: 'https://infuq.github.io/r/img/2022-2-26-2.png',
-                  insert_table_srcList: [
-                  'https://infuq.github.io/r/img/2022-2-26-2.png',
-                  ],
-                  explain_table_src: 'https://infuq.github.io/r/img/2022-2-26-3.png',
-                  explain_table_srcList: [
-                  'https://infuq.github.io/r/img/2022-2-26-3.png',
-                  ],
-                  again_insert_table_src: 'https://infuq.github.io/r/img/2022-2-26-4.png',
-                  again_insert_table_srcList: [
-                  'https://infuq.github.io/r/img/2022-2-26-4.png',
-                  ],
-                  again_explain_table_src: 'https://infuq.github.io/r/img/2022-2-26-5.png',
-                  again_explain_table_srcList: [
-                  'https://infuq.github.io/r/img/2022-2-26-5.png',
-                  ],
-                  sub_query_explain_table_src: 'https://infuq.github.io/r/img/2022-2-27-1.png',
-                  sub_query_explain_table_srcList: [
+                  type_src: 'https://infuq.github.io/r/img/2022-2-27-1.png',
+                  type_srcList: [
                   'https://infuq.github.io/r/img/2022-2-27-1.png',
                   ],
-                  three_record_table_src: 'https://infuq.github.io/r/img/2022-2-27-2.png',
-                  three_record_table_srcList: [
-                  'https://infuq.github.io/r/img/2022-2-27-2.png',
-                  ],
-                  three_record_explain_table_src: 'https://infuq.github.io/r/img/2022-2-27-3.png',
-                  three_record_explain_table_srcList: [
-                  'https://infuq.github.io/r/img/2022-2-27-3.png',
-                  ],
-
-
                   
+
+
 
                   tableData: [{
                         k1: '实际表名',
@@ -392,68 +514,68 @@ https://element.eleme.cn/#/zh-CN/component/collapse
                             k2: '如直接计算得出结果 . EXPLAIN SELECT 1+2 \G;'                                        
                     }],
 
-                    typeData: [{
-                        k1: 'ALL',
-                        k2: '全表扫描'
-                        }, {                    
-                            k1: 'index',
-                            k2: '扫描所有索引节点'
-                        }, {                    
-                            k1: 'range',
-                            k2: '根据索引进行范围扫描'
-                        }, {                    
-                            k1: 'index_subquery',
-                            k2: ''          
-                        }, {                    
-                            k1: 'unique_subquery',
-                            k2: ''
-                        }, {                    
-                            k1: 'index_merge',
-                            k2: ''
-                        }, {                    
-                            k1: 'ref_or_null',
-                            k2: ''              
-                        }, {                    
-                            k1: 'fulltext',
-                            k2: ''          
-                        }, {                    
-                            k1: 'ref',
-                            k2: '- 通过索引列直接引用匹配的所有行' + '\n' + 
-                                  '- 非主键和非唯一索引扫描, 返回匹配的所有行'
-                        }, {                    
-                            k1: 'eq_ref',
-                            k2: '- 通过索引列直接引用匹配的唯一一行' + '\n' + 
-                                  '- 主键或非空唯一索引扫描, 对于每个索引键, 表中只有一条记录与之等值匹配'
-                        }, {                    
-                            k1: 'const',
-                            k2: '常量连接'                                        
-                        }, {                    
-                            k1: 'system',
-                            k2: '系统表, 或少量数据的表. 一般不需要进行磁盘IO'                                        
-                    }],
-
-                    extraData: [{
-                        k1: 'using index',
-                        k2: '表示相应的SELECT操作中使用了覆盖索引'
-                        }, {                    
-                            k1: 'using where',
-                            k2: ''
-                        }, {                    
-                            k1: 'using where using index',
-                            k2: ''
-                        },{                    
-                            k1: 'using index condition',
-                            k2: ''
-                        },{                    
-                            k1: 'using temporary',
-                            k2: 'MySQL需要使用临时表来存储结果集,常用于排序和分组查询'
-                        }, {                    
-                            k1: 'using filesort',
-                            k2: 'MySQL无法使用索引完成的排序操作称为\'文件排序\''            
-                        }, {                    
-                            k1: 'range checked for each recond',
-                            k2: ''                                        
-                    }]
+                  typeData: [{
+                      k1: '<a href="#ALL">ALL</a>',
+                      k2: '全表扫描'
+                      }, {                    
+                          k1: '<a href="#index">index</a>',
+                          k2: '扫描所有索引节点'
+                      }, {                    
+                          k1: '<a href="#range">range</a>',
+                          k2: '根据索引进行范围扫描'
+                      }, {                    
+                          k1: 'index_subquery',
+                          k2: ''          
+                      }, {                    
+                          k1: 'unique_subquery',
+                          k2: ''
+                      }, {                    
+                          k1: 'index_merge',
+                          k2: ''
+                      }, {                    
+                          k1: 'ref_or_null',
+                          k2: ''              
+                      }, {                    
+                          k1: 'fulltext',
+                          k2: ''          
+                      }, {                    
+                          k1: '<a href="#ref">ref</a>',
+                          k2: '- 通过索引列直接引用匹配的多行' + '\n' + 
+                              '- 非主键和非唯一索引扫描, 返回匹配的多行'
+                      }, {
+                          k1: '<a href="#eq_ref">eq_ref</a>',
+                          k2: '- 通过索引列直接引用匹配的唯一一行' + '\n' + 
+                              '- 主键或非空唯一索引扫描, 对于每个索引键, 表中只有一条记录与之等值匹配'
+                      }, {                    
+                          k1: '<a href="#const">const</a>',
+                          k2: ''
+                      }, {                    
+                          k1: '<a href="#system">system</a>',
+                          k2: '系统表, 或少量数据的表. 一般不需要进行磁盘IO'                                        
+                  }],
+                  
+                  extraData: [{
+                      k1: 'using index',
+                      k2: '表示相应的SELECT操作中使用了覆盖索引'
+                      }, {                    
+                          k1: 'using where',
+                          k2: ''
+                      }, {                    
+                          k1: 'using where; using index',
+                          k2: ''
+                      },{                    
+                          k1: 'using index condition',
+                          k2: ''
+                      },{                    
+                          k1: 'using temporary',
+                          k2: 'MySQL需要使用临时表来存储结果集,常用于排序和分组查询'
+                      }, {                    
+                          k1: 'using filesort',
+                          k2: 'MySQL无法使用索引完成的排序操作称为\'文件排序\''            
+                      }, {                    
+                          k1: 'range checked for each recond',
+                          k2: ''                                        
+                  }]
 
                 }
             },
