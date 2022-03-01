@@ -117,7 +117,7 @@ https://element.eleme.cn/#/zh-CN/component/collapse
                       <span style="color:crimson">[ type ] *</span>
                     </template>
                     <div>
-                      连接类型<br><br>
+                      连接类型(数据库引擎查找表的一种方式)<br><br>
                       由快到慢 : system > const > eq_ref > ref > range > index > ALL<br><br>
 
                       <!-- https://www.cnblogs.com/zhuang229/p/11754408.html -->
@@ -514,7 +514,13 @@ https://element.eleme.cn/#/zh-CN/component/collapse
             padding: 15px;">
               作用于索引列
               <br><br>
-              =, &lt;>, >, >=, &lt;, &lt;=, IS NULL, &lt;=>, BETWEEN, LIKE, or IN()
+              =, &lt;>, >, >=, &lt;, &lt;=, IS NULL, &lt;=>, BETWEEN, LIKE, or IN()<br>
+              <br>
+              between num1 and num2 如果范围内匹配到的数据行太多,也会索引失效,type = ALL<br>
+              &lt; num 如果范围内匹配到的数据行太多,也会索引失效,type = ALL<br>
+              > num1 and &lt; num2 如果范围内匹配到的数据行太多,也会索引失效,type = ALL<br>
+              > num 如果范围内匹配到的数据行太多,也会索引失效, type = ALL<br>
+              即, > 和 &lt; , between .. and .. 要根据范围内匹配到的数据行多少, 决定是否type = ALL 或 type = range<br>
             </div>
 <br>
 <br>
@@ -554,50 +560,61 @@ https://element.eleme.cn/#/zh-CN/component/collapse
             ```<br>
             create table t (<br>
             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;id int(10) primary key,<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;u_id int(10),<br>
             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;u_name varchar(20),<br>
             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;u_year int(5),<br>
             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;u_address varchar(20)<br>
             ) ENGINE=InnoDB;    <br>        
             ```<br>
+            create index idx_u_id on t(u_id);<br>
             create index idx_name_year on t(u_name,u_year);<br>
 
 <br>
 <br>
 <p id="Using index"></p>
 <i class="fa fa-terminal" aria-hidden="true"></i> Using index<br>
-查询的列被索引覆盖, 且WHERE条件满足索引的最左前缀匹配原则时<br>
+索引覆盖<br>
 explain select u_name,u_year from t where u_name = 'Libai'<br>
 explain select u_name,u_year from t where u_name = 'Libai' and u_year = 2021<br>
+explain select id,u_id from t where u_id = 2022<br>
+explain select u_id from t<br>
 <br><br><br>
 <p id="Using where; Using index"></p>
 <i class="fa fa-terminal" aria-hidden="true"></i> Using where; Using index<br>
-查询的列被索引覆盖, 但WHERE条件不满足索引最左前缀匹配原则时<br>
-explain select u_name,u_year from t where u_year=2021<br>
-explain select u_name,u_year from t where u_year>2021<br>
-查询的列被索引覆盖, 且WHERE条件使用索引的前导列的范围<br>
-explain select u_name,u_year from t where u_name > 'Libai'<br>
+索引范围查询(包括整个索引树) & 索引覆盖<br>
+explain select u_name,u_year from t where u_year = 2021<br> <!-- 扫描整个索引树 type = index -->
+explain select u_name,u_year from t where u_year > 2021<br> <!-- 扫描整个索引树 type = index -->
+explain select u_name,u_year from t where u_name > 'Libai'<br> <!-- 索引范围查询 type = range -->
+explain select u_name,u_year from t where u_name = 'Libai' and u_year > 2022<br> <!-- 索引范围查询 type = range -->
+explain select id,u_id from t where u_id > 2022<br> <!-- 索引范围查询 type = range -->
 <br><br><br>
 <p id="Using index condition"></p>
 <i class="fa fa-terminal" aria-hidden="true"></i> Using index condition<br>
-查询的列未被索引覆盖, 且WHERE条件使用索引的前导列的范围<br>
-explain select u_name,u_year,u_address from t where u_name > 'Libai'<br>
-查询的列未被索引覆盖, 且WHERE条件不完全使用覆盖索引<br>
-explain select * from t where u_name = 'Libai' and u_year > 2020<br>
+索引范围查询(包括整个索引树) & 索引下推(回表)<br>
+explain select * from t where u_name = 'Libai' and u_year > 2020<br> <!-- type = range -->
+explain select * from t where u_id between 200 and 4000  前提: 索引范围内匹配到的数据行不多, 如果匹配到的数据行太多, 直接 type = ALL, Extra = Using where<br> 
 <br><br><br>
 <p id="Using where"></p>
 <i class="fa fa-terminal" aria-hidden="true"></i> Using where<br>
-查询的列未被索引覆盖, 且WHERE条件不满足索引最左前缀匹配原则时<br>
-explain select * from t where u_year=2021<br>
-explain select * from t where u_year>2021<br>
-查询的列未被索引覆盖, 且WHERE条件使用非索引列<br>
+Server层在接收到存储引擎层返回的记录后, 再根据WHERE条件(全部WHERE或剩下部分WHERE)判断之后返回给客户端.<br>
+explain select * from t where u_name > 'Libai'<br> <!-- type = ALL -->
+explain select * from t where u_year = 2021<br>
+explain select * from t where u_year > 2021<br>
+explain select * from t where u_id > 2022<br>
+explain select * from t where u_id = 209 and u_name = 'Libai'<br>  <!--   -->
+explain select * from t where u_id &gt;= 10 and u_id &lt;= 10000<br> <!-- 全表扫描 type = ALL -->
+explain select * from t where u_id between 1 and 100000<br> <!-- 全表扫描 type = ALL -->
 explain select * from t where u_address='sichuan'<br>
+
+
 <br><br><br>
 <p id="Extra = NULL"></p>
 <i class="fa fa-terminal" aria-hidden="true"></i> Extra = NULL<br>
-查询的列未被索引覆盖, 且WHERE条件满足索引的最左前缀匹配原则时<br>
 explain select * from t where u_name = 'Libai'<br>
 explain select u_name,u_year,u_address from t where u_name = 'Libai'<br>
-<i class="fa fa-bell-o" aria-hidden="true"></i> 虽然用到了索引, 但是部分字段未被索引覆盖, 必须回表
+explain select * from t where u_name = 'Libai' and u_year = 2021<br>
+explain select * from t where id=3021<br>
+explain select * from t where u_id=2022<br>
             </div>
             <br>
             <br>
