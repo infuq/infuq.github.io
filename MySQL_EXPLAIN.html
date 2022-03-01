@@ -592,7 +592,7 @@ explain select id,u_id from t where u_id > 2022<br> <!-- 索引范围查询 type
 <i class="fa fa-terminal" aria-hidden="true"></i> Using index condition<br>
 索引范围查询(包括整个索引树) & 索引下推(回表)<br>
 explain select * from t where u_name = 'Libai' and u_year > 2020<br> <!-- type = range -->
-explain select * from t where u_id between 200 and 4000  前提: 索引范围内匹配到的数据行不多, 如果匹配到的数据行太多, 直接 type = ALL, Extra = Using where<br> 
+explain select * from t where u_id between 200 and 4000  前提: 索引范围内匹配到的数据行不多, 如果匹配到的数据行太多, 直接 type = ALL, Extra = Using where <a href="https://zhuanlan.zhihu.com/p/474106509" style="background-color:transparent;" target="_blank">案例</a><br> 
 <br><br><br>
 <p id="Using where"></p>
 <i class="fa fa-terminal" aria-hidden="true"></i> Using where<br>
@@ -604,7 +604,7 @@ explain select * from t where u_id > 2022<br>
 explain select * from t where u_id = 209 and u_name = 'Libai'<br>  <!--   -->
 explain select * from t where u_id &gt;= 10 and u_id &lt;= 10000<br> <!-- 全表扫描 type = ALL -->
 explain select * from t where u_id between 1 and 100000<br> <!-- 全表扫描 type = ALL -->
-explain select * from t where u_address='sichuan'<br>
+explain select * from t where u_address='sichuan'<br> <!-- 全表扫描 type = ALL -->
 
 
 <br><br><br>
