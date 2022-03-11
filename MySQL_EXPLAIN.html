@@ -592,7 +592,7 @@ explain select id,u_id from t where u_id > 2022<br> <!-- 索引范围查询 type
 <i class="fa fa-terminal" aria-hidden="true"></i> Using index condition<br>
 索引范围查询(包括整个索引树) & 索引下推(回表)<br>
 explain select * from t where u_name = 'Libai' and u_year > 2020<br> <!-- type = range -->
-explain select * from t where u_id between 200 and 4000  前提: 索引范围内匹配到的数据行不多, 如果匹配到的数据行太多, 直接 type = ALL, Extra = Using where <a href="https://zhuanlan.zhihu.com/p/474106509" style="background-color:transparent;" target="_blank">案例</a><br> 
+explain select * from t where u_id between 200 and 4000  <i class="fa fa-exclamation-triangle" aria-hidden="true"></i> 索引范围内匹配到的数据行不多, 如果匹配到的数据行太多, 直接 type = ALL, Extra = Using where . <i class="fa fa-link" aria-hidden="true"></i> <a href="https://zhuanlan.zhihu.com/p/474106509" style="background-color:transparent;" target="_blank">案例</a><br> 
 <br><br><br>
 <p id="Using where"></p>
 <i class="fa fa-terminal" aria-hidden="true"></i> Using where<br>
@@ -618,16 +618,25 @@ explain select * from t where u_id=2022<br>
             </div>
             <br>
             <br>
-            <br>
-            <br>
-            <br>
-            <br>
-
 
             <p style="height: 100px;"></p>
             人生除了眼前的苟且, 还有C++和远方.<br>
             深耕 & 浅尝辄止<br>
+            <br>
+            <br>
+            <br>
 
+
+
+            <span class="link">参考外链</span>
+
+            <div class="link-list">
+                <p style="height: 10px;"></p>
+                <i class="fa fa-link" aria-hidden="true"></i><a target="_blank" style="margin-left: 10px;" href="https://blog.csdn.net/dennis211/article/details/78170079">MySQL中Explain的type解释</a>
+            </div>
+            <br>
+            <br>
+            <br>
 
                 
             <!-- 回到顶部 -->
