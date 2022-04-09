@@ -590,7 +590,7 @@ explain select id,u_id from t where u_id > 2022<br> <!-- 索引范围查询 type
 <br><br><br>
 <p id="Using index condition"></p>
 <i class="fa fa-terminal" aria-hidden="true"></i> Using index condition<br>
-索引范围查询(包括整个索引树) & 索引下推(回表)<br>
+索引范围查询(包括整个索引树) & 回表 { 索引下推 }<br>
 explain select * from t where u_name = 'Libai' and u_year > 2020<br> <!-- type = range -->
 explain select * from t where u_id between 200 and 4000  <i class="fa fa-exclamation-triangle" aria-hidden="true"></i> 索引范围内匹配到的数据行不多, 如果匹配到的数据行太多, 直接 type = ALL, Extra = Using where . <i class="fa fa-link" aria-hidden="true"></i> <a href="https://zhuanlan.zhihu.com/p/474106509" style="background-color:transparent;" target="_blank">案例</a><br> 
 <br><br><br>
