@@ -32,37 +32,17 @@ https://element.eleme.cn/#/zh-CN/component/collapse
                 <p style="height: 10px;"></p>
                 
                 默认16个数据库.初始默认使用0号库. 所有库密码相同<br><br>
-                select <dbid> 切换数据库<br>
-                keys *<br>
-                exists key [key ...]<br>
-                type key<br>
-                del key [key ...]<br>
-                expire key seconds<br>
-                ttl key 查看剩余过期时间<br>
-                dbsize 查看当前数据库key的数量<br>
-                flushdb 清空当前库<br>
-                flushall 清空全部库<br>
-                get key<br>
-                set key value<br>
-                append key value<br>
-                strlen key<br>
-                setnx key value 只有key不存在时执行<br>
-                <br>
-                incr key<br>
-                incrby key increment<br>
-                decr key<br>
-                decrby key decrement<br>
-                <br>
-                mset key value [key value ...]<br>
-                mget key [key ...]<br>
-                msetnx key value [key value ...]<br>
-                <br>
-                getrange key start end<br>
-                getrange key start -1    倒数第一个<br>
-                setrange key offset value<br>
-                <br>
-                setex key seconds value 设置键值同时设置过期时间<br>
-                getset key value 设置新值同时获得旧值<br>                
+                SELECT <dbid> 切换数据库<br>
+                KEYS *<br>
+                EXISTS key [key ...]<br>
+                TYPE key<br>
+                DEL key [key ...]<br>
+                EXPIRE key seconds<br>
+                TTL key 查看剩余过期时间<br>
+                DBSIZE 查看当前数据库key的数量<br>
+                FLUSHDB 清空当前库<br>
+                FLUSHALL 清空全部库<br>
+                            
 
                 <br>        
                 <br>        
