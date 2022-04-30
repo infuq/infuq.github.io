@@ -197,7 +197,7 @@ public CompletableFuture<Object> request(Object request, int timeout, ExecutorSe
 <br>
 消费者端在进行泛化调用时, invocation对象中的泛化信息是由<font style="color:green">org.apache.dubbo.rpc.filter.GenericImplFilter#invoke</font>方法进行组装.
 
-[GenericImplFilter源码](https://github.com/infuq/dubbo-v2.7.3/blob/main/dubbo-rpc/dubbo-rpc-api/src/main/java/org/apache/dubbo/rpc/filter/GenericImplFilter.java)
+[ [GenericImplFilter源码](https://github.com/infuq/dubbo-v2.7.3/blob/main/dubbo-rpc/dubbo-rpc-api/src/main/java/org/apache/dubbo/rpc/filter/GenericImplFilter.java) ]
 
 
 
@@ -206,7 +206,7 @@ public CompletableFuture<Object> request(Object request, int timeout, ExecutorSe
 <br>
 提供者端如果发现消费者端是通过泛化调用的方式进行调用接口, 那么在 <font style="color:green">org.apache.dubbo.rpc.filter.GenericFilter#invoke</font> 方法中根据invocation对象中的泛化信息重新构造一个新的invocation, 将新的invocation继续向下传递.在新的invation对象中会将methodName="$invoke" 转成实际的方法名称, 包括一些其他转换.
 
-[GenericFilter源码](https://github.com/infuq/dubbo-v2.7.3/blob/main/dubbo-rpc/dubbo-rpc-api/src/main/java/org/apache/dubbo/rpc/filter/GenericFilter.java)
+[ [GenericFilter源码](https://github.com/infuq/dubbo-v2.7.3/blob/main/dubbo-rpc/dubbo-rpc-api/src/main/java/org/apache/dubbo/rpc/filter/GenericFilter.java) ]
 
 <br>
 <br>
