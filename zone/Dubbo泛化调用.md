@@ -1,4 +1,8 @@
 
+<br>
+<br>
+<br>
+
 
 提供者端配置DubboProvider.xml
 ```xml
@@ -120,11 +124,11 @@ public class DubboConsumer {
 
 查看消费端<font style="color: orange;">泛化调用</font>的DubboInvoker
 
-![消费端泛化调用invoker.png](./images/2022-4-29/消费端泛化调用invoker.png)
+![消费端泛化调用invoker](./images/2022-4-29/消费端泛化调用invoker.png)
 
 查看消费端<font style="color: #CC99FF;">常规调用</font>的DubboInvoker
 
-![消费端常规调用invoker.png](./images/2022-4-29/消费端常规调用invoker.png)
+![消费端常规调用invoker](./images/2022-4-29/消费端常规调用invoker.png)
 
 以上两张图的不同点<br>
 1.type值不同<br>
@@ -144,11 +148,11 @@ dubbo://192.168.0.102:20880/com.infuq.facade.FooFacade?anyhost=true&application=
 
 查看消费端<font style="color: orange;">泛化调用</font>的invocation
 
-![消费端泛化调用invocation.png](./images/2022-4-29/消费端泛化调用invocation.png)
+![消费端泛化调用invocation](./images/2022-4-29/消费端泛化调用invocation.png)
 
 查看消费端<font style="color: #CC99FF;">常规调用</font>的invocation
 
-![消费端常规调用invocation.png](./images/2022-4-29/消费端常规调用invocation.png)
+![消费端常规调用invocation](./images/2022-4-29/消费端常规调用invocation.png)
 
 以上两张图的不同点<br>
 1.methodName和serviceName不同<br>
@@ -193,182 +197,22 @@ public CompletableFuture<Object> request(Object request, int timeout, ExecutorSe
 <br>
 消费者端在进行泛化调用时, invocation对象中的泛化信息是由<font style="color:green">org.apache.dubbo.rpc.filter.GenericImplFilter#invoke</font>方法进行组装.
 
-```java
-// org.apache.dubbo.rpc.filter.GenericImplFilter
+[GenericImplFilter源码](https://github.com/infuq/dubbo-v2.7.3/blob/main/dubbo-rpc/dubbo-rpc-api/src/main/java/org/apache/dubbo/rpc/filter/GenericImplFilter.java)
 
-@Override
-public Result invoke(Invoker<?> invoker, Invocation invocation) throws RpcException {
-    String generic = invoker.getUrl().getParameter(GENERIC_KEY);
-    if (ProtocolUtils.isGeneric(generic)
-            && (!$INVOKE.equals(invocation.getMethodName()) && !$INVOKE_ASYNC.equals(invocation.getMethodName()))
-            && invocation instanceof RpcInvocation) {
-        RpcInvocation invocation2 = new RpcInvocation(invocation);
-        String methodName = invocation2.getMethodName();
-        Class<?>[] parameterTypes = invocation2.getParameterTypes();
-        Object[] arguments = invocation2.getArguments();
 
-        String[] types = new String[parameterTypes.length];
-        for (int i = 0; i < parameterTypes.length; i++) {
-            types[i] = ReflectUtils.getName(parameterTypes[i]);
-        }
-
-        Object[] args;
-        if (ProtocolUtils.isBeanGenericSerialization(generic)) {
-            args = new Object[arguments.length];
-            for (int i = 0; i < arguments.length; i++) {
-                args[i] = JavaBeanSerializeUtil.serialize(arguments[i], JavaBeanAccessor.METHOD);
-            }
-        } else {
-            args = PojoUtils.generalize(arguments);
-        }
-
-        if (RpcUtils.isReturnTypeFuture(invocation)) {
-            invocation2.setMethodName($INVOKE_ASYNC);
-        } else {
-            invocation2.setMethodName($INVOKE);
-        }
-        invocation2.setParameterTypes(GENERIC_PARAMETER_TYPES);
-        invocation2.setArguments(new Object[]{methodName, types, args});
-        return invoker.invoke(invocation2);
-    } else if ((invocation.getMethodName().equals($INVOKE) || invocation.getMethodName().equals($INVOKE_ASYNC))
-            && invocation.getArguments() != null
-            && invocation.getArguments().length == 3
-            && ProtocolUtils.isGeneric(generic)) {
-
-        Object[] args = (Object[]) invocation.getArguments()[2];
-        if (ProtocolUtils.isJavaGenericSerialization(generic)) {
-
-            for (Object arg : args) {
-                if (!(byte[].class == arg.getClass())) {
-                    error(generic, byte[].class.getName(), arg.getClass().getName());
-                }
-            }
-        } else if (ProtocolUtils.isBeanGenericSerialization(generic)) {
-            for (Object arg : args) {
-                if (!(arg instanceof JavaBeanDescriptor)) {
-                    error(generic, JavaBeanDescriptor.class.getName(), arg.getClass().getName());
-                }
-            }
-        }
-
-        invocation.setAttachment(
-                GENERIC_KEY, invoker.getUrl().getParameter(GENERIC_KEY));
-    }
-    //
-    return invoker.invoke(invocation);
-}
-```
 
 
 <br>
 <br>
-提供者端如果发现消费者端是通过泛化调用的方式进行调用接口, 那么在 <font style="color:green">org.apache.dubbo.rpc.filter.GenericFilter#invoke</font> 方法中根据invocation对象中的泛化信息重新构造一个新的invocation, 将新的invocation继续向下传递.
+提供者端如果发现消费者端是通过泛化调用的方式进行调用接口, 那么在 <font style="color:green">org.apache.dubbo.rpc.filter.GenericFilter#invoke</font> 方法中根据invocation对象中的泛化信息重新构造一个新的invocation, 将新的invocation继续向下传递.在新的invation对象中会将methodName="$invoke" 转成实际的方法名称, 包括一些其他转换.
 
-```java
-// org.apache.dubbo.rpc.filter.GenericFilter
+[GenericFilter源码](https://github.com/infuq/dubbo-v2.7.3/blob/main/dubbo-rpc/dubbo-rpc-api/src/main/java/org/apache/dubbo/rpc/filter/GenericFilter.java)
 
-@Override
-public Result invoke(Invoker<?> invoker, Invocation inv) throws RpcException {
-    if ((inv.getMethodName().equals($INVOKE) || inv.getMethodName().equals($INVOKE_ASYNC))
-            && inv.getArguments() != null
-            && inv.getArguments().length == 3
-            && !GenericService.class.isAssignableFrom(invoker.getInterface())) {
-        String name = ((String) inv.getArguments()[0]).trim();
-        String[] types = (String[]) inv.getArguments()[1];
-        Object[] args = (Object[]) inv.getArguments()[2];
-        try {
-            Method method = ReflectUtils.findMethodByMethodSignature(invoker.getInterface(), name, types);
-            Class<?>[] params = method.getParameterTypes();
-            if (args == null) {
-                args = new Object[params.length];
-            }
-
-            if (args.length != types.length) {
-                throw new RpcException("args.length != types.length");
-            }
-            String generic = inv.getAttachment(GENERIC_KEY);
-
-            if (StringUtils.isBlank(generic)) {
-                generic = RpcContext.getContext().getAttachment(GENERIC_KEY);
-            }
-
-            if (StringUtils.isEmpty(generic)
-                    || ProtocolUtils.isDefaultGenericSerialization(generic)
-                    || ProtocolUtils.isGenericReturnRawResult(generic)) {
-                args = PojoUtils.realize(args, params, method.getGenericParameterTypes());
-            } else if (ProtocolUtils.isJavaGenericSerialization(generic)) {
-                for (int i = 0; i < args.length; i++) {
-                    if (byte[].class == args[i].getClass()) {
-                        try (UnsafeByteArrayInputStream is = new UnsafeByteArrayInputStream((byte[]) args[i])) {
-                            args[i] = ExtensionLoader.getExtensionLoader(Serialization.class)
-                                    .getExtension(GENERIC_SERIALIZATION_NATIVE_JAVA)
-                                    .deserialize(null, is).readObject();
-                        } catch (Exception e) {
-                            throw new RpcException("Deserialize argument [" + (i + 1) + "] failed.", e);
-                        }
-                    } else {
-                        throw new RpcException(
-                                "Generic serialization [" +
-                                        GENERIC_SERIALIZATION_NATIVE_JAVA +
-                                        "] only support message type " +
-                                        byte[].class +
-                                        " and your message type is " +
-                                        args[i].getClass());
-                    }
-                }
-            } else if (ProtocolUtils.isBeanGenericSerialization(generic)) {
-                for (int i = 0; i < args.length; i++) {
-                    if (args[i] instanceof JavaBeanDescriptor) {
-                        args[i] = JavaBeanSerializeUtil.deserialize((JavaBeanDescriptor) args[i]);
-                    } else {
-                        throw new RpcException(
-                                "Generic serialization [" +
-                                        GENERIC_SERIALIZATION_BEAN +
-                                        "] only support message type " +
-                                        JavaBeanDescriptor.class.getName() +
-                                        " and your message type is " +
-                                        args[i].getClass().getName());
-                    }
-                }
-            } else if (ProtocolUtils.isProtobufGenericSerialization(generic)) {
-                // as proto3 only accept one protobuf parameter
-                if (args.length == 1 && args[0] instanceof String) {
-                    try (UnsafeByteArrayInputStream is =
-                                 new UnsafeByteArrayInputStream(((String) args[0]).getBytes())) {
-                        args[0] = ExtensionLoader.getExtensionLoader(Serialization.class)
-                                .getExtension(GENERIC_SERIALIZATION_PROTOBUF)
-                                .deserialize(null, is).readObject(method.getParameterTypes()[0]);
-                    } catch (Exception e) {
-                        throw new RpcException("Deserialize argument failed.", e);
-                    }
-                } else {
-                    throw new RpcException(
-                            "Generic serialization [" +
-                                    GENERIC_SERIALIZATION_PROTOBUF +
-                                    "] only support one " + String.class.getName() +
-                                    " argument and your message size is " +
-                                    args.length + " and type is" +
-                                    args[0].getClass().getName());
-                }
-            }
-
-            // 构造新的invocation
-            RpcInvocation rpcInvocation = new RpcInvocation(method, invoker.getInterface().getName(), args, inv.getObjectAttachments(), inv.getAttributes());
-            rpcInvocation.setInvoker(inv.getInvoker());
-            rpcInvocation.setTargetServiceUniqueName(inv.getTargetServiceUniqueName());
-
-            return invoker.invoke(rpcInvocation);
-        } catch (NoSuchMethodException | ClassNotFoundException e) {
-            throw new RpcException(e.getMessage(), e);
-        }
-    }
-    return invoker.invoke(inv);
-}
-
-```
-
-以上方法, 如果是泛化调用请求, 会将请求invation中的methodName="$invoke" 转成实际的方法名称, 包括一些其他转换.
+<br>
+<br>
+<br>
 
 
+![链路图](./images/2022-4-29/链路图.png)
 
 
