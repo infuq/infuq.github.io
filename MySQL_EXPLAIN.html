@@ -596,7 +596,8 @@ explain select * from t where u_id between 200 and 4000  <i class="fa fa-exclama
 <br><br><br>
 <p id="Using where"></p>
 <i class="fa fa-terminal" aria-hidden="true"></i> Using where<br>
-Server层在接收到存储引擎层返回的记录后, 再根据WHERE条件(全部WHERE或剩下部分WHERE)判断之后返回给客户端.<br>
+1.全表扫描,未使用索引,Server层在接收到存储引擎层返回的记录后, 再根据WHERE条件(全部WHERE或剩下部分WHERE)判断之后返回给客户端.<br>
+2.使用索引(如果是非聚簇索引,还存在回表),Server层在接收到存储引擎层返回的记录后, 再根据WHERE条件(全部WHERE或剩下部分WHERE)判断之后返回给客户端.<br>
 explain select * from t where u_name > 'Libai'<br> <!-- type = ALL -->
 explain select * from t where u_year = 2021<br>
 explain select * from t where u_year > 2021<br>
@@ -632,7 +633,8 @@ explain select * from t where u_id=2022<br>
 
             <div class="link-list">
                 <p style="height: 10px;"></p>
-                <i class="fa fa-link" aria-hidden="true"></i><a target="_blank" style="margin-left: 10px;" href="https://blog.csdn.net/dennis211/article/details/78170079">MySQL中Explain的type解释</a>
+                <i class="fa fa-link" aria-hidden="true"></i><a target="_blank" style="margin-left: 10px;" href="https://blog.csdn.net/dennis211/article/details/78170079">MySQL中Explain的type解释</a><br>
+                <i class="fa fa-link" aria-hidden="true"></i><a target="_blank" style="margin-left: 10px;" href="https://www.cnblogs.com/kerrycode/p/9909093.html">MySQL执行计划中Extra浅析</a>
             </div>
             <br>
             <br>
