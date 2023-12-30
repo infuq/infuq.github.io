@@ -1,6 +1,6 @@
 document.writeln("<div class=\"container-footer\">");
 document.writeln("    <div id=\"footer\">");
-document.writeln("        <p>Copyright &copy; 2018-2023 书唐瑞</p>");
+document.writeln("        <p>Copyright &copy; 2018-2024 书唐瑞</p>");
 document.writeln("        <p>");
 document.writeln("            <!-- 知乎 -->");
 document.writeln("            <a target=\"_blank\" href=\"https://zhuanlan.zhihu.com/infuq-\" style=\"padding: 0 5px;\">");
